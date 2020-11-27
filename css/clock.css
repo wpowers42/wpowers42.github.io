@@ -1,0 +1,28 @@
+body {
+  background-color: black;
+}
+
+#clock {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 45% 5% 45%;
+  margin-left: auto;
+  font-size: 40vw;
+  color: white;
+}
+
+#hours {
+  justify-self: end;
+  margin: auto;
+}
+
+#ampm {
+  justify-self: center;
+  font-size: 2vw;
+  margin: auto;
+}
+
+#minutes {
+  justify-self: start;
+  margin: auto;
+}
