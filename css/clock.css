@@ -1,11 +1,10 @@
-html,
-body {
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@200&display=swap');
+html, body {
   background-color: black;
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: 'Work Sans';
-  font-weight: 200;
 }
 
 .navigation-container {
@@ -20,7 +19,7 @@ body {
   display: grid;
   grid-template-columns: 47% 6% 47%;
   margin: auto;
-  font-size: 40vw;
+  font-size: 38vw;
   color: white;
 }
 
