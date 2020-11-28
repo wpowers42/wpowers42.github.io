@@ -53,21 +53,21 @@ html, body {
 .pulsate {
   animation: pulse 3s ease-out infinite;
   opacity: 0.15;
-  font-weight: 800;
+  font-weight: 200;
 }
 
 @keyframes pulse {
   0% {
     opacity: 0.15;
-    font-weight: 800;
+    font-weight: 200;
   }
   50% {
     opacity: 0.75;
-    font-weight: 200;
+    font-weight: 400;
   }
   100% {
     opacity: 0.15;
-    font-weight: 800;
+    font-weight: 200;
   }
 }
 
