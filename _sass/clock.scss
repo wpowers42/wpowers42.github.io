@@ -32,13 +32,24 @@ html, body {
   height: 100%;
   display: grid;
   grid-template-columns: 47% 6% 47%;
+  justify-items: center;
   margin: auto;
   font-size: 38vw;
   color: white;
 }
 
-#hours {
+#hours,
+#minutes {
   margin: auto;
+  width: 100%;
+}
+
+#hours { 
+  text-align: right;
+}
+
+#minutes {
+  text-align: left;
 }
 
 .ampm {
@@ -68,8 +79,4 @@ html, body {
     opacity: 0.15;
     font-weight: 200;
   }
-}
-
-#minutes {
-  margin: auto;
 }
