@@ -14,4 +14,8 @@
 
 .favorite { transition: background-color 0s; background-color: rgba(255, 255, 0, 0.5); }
 
+.footer-credit { position: fixed; left: 0; bottom: 0; padding-bottom: 5px; background-color: white; width: 100%; color: rgba(0, 0, 0, 0.5); text-align: center; font-size: 12px; }
+
+.footer-credit a { text-decoration: none; }
+
 /*# sourceMappingURL=movie_puns.css.map */
