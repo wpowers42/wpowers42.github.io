@@ -1,15 +1,12 @@
 ---
 layout: default
 title: Clock
+permalink: /clock/
 ---
 <link rel="stylesheet" href="/assets/css/clock.css">
 
 
-<div class="navigation-container">
-  <a href="../index.html" class='link-home'>
-    <img class="arrow-back" src="../images/ic_arrow_back_48px.svg" />
-  </a>
-</div>
+{% include navigation.home.html %}
 <div id="clock">
   <div id="hours"></div>
   <div class="ampm pulsate">

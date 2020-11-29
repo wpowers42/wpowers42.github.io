@@ -1,5 +1,5 @@
----
----
+// ---
+// ---
 
 (function () {
     const searchBox = document.querySelector('.search-box');
@@ -28,10 +28,12 @@
                 return response.json();
             }))
         }).then(data => {
+            const rhymeBlacklist = ['part'];
             const rhymes = data[0][0].filter(rhyme => {
                 return (rhyme.score >= minScore
                     && rhyme.freq >= minFreq
-                    && rhyme.word.length >= minLength)
+                    && rhyme.word.length >= minLength
+                    && !rhymeBlacklist.includes(rhyme.word.toLowerCase()));
             });
             const syllables = parseInt(data[0][1].syllables);
             const sortedRhymes = rhymes.sort((a, b) => {

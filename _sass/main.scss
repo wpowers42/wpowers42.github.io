@@ -1,8 +1,3 @@
-/* @font-face {
-  font-family: 'Work Sans';
-  src: url(fonts/WorkSans-VariableFont_wght.ttf);
-} */
-
 html, body {
   background-color: white;
   margin: 0;
@@ -12,7 +7,10 @@ html, body {
 }
 
 .navigation-container {
-  margin-top: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
   padding: 10px;
   text-align: center;
   display: flex;

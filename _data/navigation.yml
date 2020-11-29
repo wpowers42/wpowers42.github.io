@@ -1,5 +1,3 @@
-- name: Home
-  link: /
 - name: Clock
   link: /clock
 - name: Movie Puns

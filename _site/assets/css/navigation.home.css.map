@@ -1,0 +1,14 @@
+{
+	"version": 3,
+	"file": "navigation.home.css",
+	"sources": [
+		"navigation.home.scss",
+		"_sass/navigation.home.scss"
+	],
+	"sourcesContent": [
+		"@import \"navigation.home\";",
+		".navigation-home-container {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n\n.link-home {\n  text-decoration: none;\n}\n\n.arrow-back {\n  height: 48px;\n  width: 48px;\n}"
+	],
+	"names": [],
+	"mappings": "ACAA,AAAA,0BAA0B,CAAC,EACzB,QAAQ,EAAE,QAAQ,EAClB,GAAG,EAAE,CAAC,EACN,IAAI,EAAE,CAAC,GACR;;AAED,AAAA,UAAU,CAAC,EACT,eAAe,EAAE,IAAI,GACtB;;AAED,AAAA,WAAW,CAAC,EACV,MAAM,EAAE,IAAI,EACZ,KAAK,EAAE,IAAI,GACZ"
+}
