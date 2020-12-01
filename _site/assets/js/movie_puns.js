@@ -15,7 +15,7 @@
     })
 
     const getRhymes = query => {
-        const movieListUrl = 'http://64.225.19.78:5000/movies'
+        const movieListUrl = 'https://willp.herokuapp.com/movies'
         const rhymeUrl = `https://rhymebrain.com/talk?function=getRhymes&word=${query}&next=&function=getWordInfo&word=${query}`;
         const minScore = 265;
         const minFreq = 20;
