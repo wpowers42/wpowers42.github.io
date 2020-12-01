@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>http://localhost:4000/clock/</loc>
+<loc>/clock/</loc>
 </url>
 <url>
-<loc>http://localhost:4000/</loc>
+<loc>/</loc>
 </url>
 <url>
-<loc>http://localhost:4000/movie_puns/</loc>
+<loc>/movie_puns/</loc>
 </url>
 <url>
-<loc>http://localhost:4000/age/age.html</loc>
+<loc>/age/age.html</loc>
 <lastmod>2020-11-27T23:06:05-07:00</lastmod>
 </url>
 </urlset>
