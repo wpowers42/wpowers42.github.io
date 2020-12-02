@@ -16,19 +16,22 @@
 
     const getRhymes = query => {
         const movieListUrl = 'https://willp.herokuapp.com/movies'
-        const rhymeUrl = `https://rhymebrain.com/talk?function=getRhymes&word=${query}&next=&function=getWordInfo&word=${query}`;
-        const minScore = 265;
-        const minFreq = 20;
+        // const rhymeUrl = `https://rhymebrain.com/talk?function=getRhymes&word=${query}&next=&function=getWordInfo&word=${query}`;
+        const rhymeUrl = `https://willp.herokuapp.com/rhymes/${query}`
+        // const minScore = 225;
+        // const minFreq = 20;
         const minLength = 4;
+        
+        // TODO: fix
+        const syllables = 10;
 
         fetch(rhymeUrl)
             .then(res => res.json())
-            .then(([rhymesDicts, syllables]) => {
+            // .then(([rhymesDicts, syllables]) => {
+            .then(data => {
                 const rhymeBlacklist = ['part'];
-                const rhymes = rhymesDicts.filter(rhyme => {
-                    return (rhyme.score >= minScore
-                        && rhyme.freq >= minFreq
-                        && rhyme.word.length >= minLength
+                const rhymes = data.filter(rhyme => {
+                    return (rhyme.word.length >= minLength
                         && !rhymeBlacklist.includes(rhyme.word.toLowerCase()));
                 });
                 const sortedRhymes = rhymes.sort((a, b) => {
@@ -76,13 +79,22 @@
                                     matchingMovies.push({
                                         title: movie.title,
                                         editedTitle,
-                                        votes: movie.votes
+                                        votes: movie.votes,
+                                        rhyme
                                     });
                                     rhymeFound = true;
                                 }
                             });
                         });
-                        const sortedMovies = matchingMovies.sort((a, b) => b.votes > a.votes);
+                        const sortedMovies = matchingMovies.sort((a, b) => {
+                            return b.votes - a.votes;
+                            // if (b.rhyme.score = a.rhyme.score) {
+                            //     return b.votes - a.votes;
+                            // } else {
+                            //     return b.rhyme.score - a.rhyme.score
+                            // }
+                        });
+                        console.log(sortedMovies);
                         const searchResults = document.querySelector('.search-results');
                         searchResults.addEventListener('click', function (event) {
                             if (event.target.className === 'movie-container') {
