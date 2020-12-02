@@ -21,7 +21,7 @@
         // const minScore = 225;
         // const minFreq = 20;
         const minLength = 4;
-        
+
         // TODO: fix
         const syllables = 10;
 
@@ -63,7 +63,11 @@
 
                 });
                 const rhymeList = sortedRhymes.map(r => r.word.toLowerCase());
-                fetch(movieListUrl + `?queries=${rhymeList.join(',')}`)
+                const movieFullUrl = movieListUrl + `?queries=${rhymeList.join(',')}`;
+                const movieShortenedUrl = movieFullUrl.substring(0, 2048)
+                const movieUrl = movieShortenedUrl.substring(0, movieShortenedUrl.lastIndexOf(','));
+                // 2048
+                fetch(movieUrl)
                     .then(res => res.json())
                     .then(movies => {
                         const matchingMovies = [];
