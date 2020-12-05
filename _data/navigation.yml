@@ -1,4 +1,6 @@
+- name: Age
+  link: /age
 - name: Clock
   link: /clock
 - name: Movie Puns
-  link: /movie_puns
+  link: /puns/movies
