@@ -74,9 +74,9 @@
       return res.json();
     }).then(function (data) {
       createEventListeners();
+      clearResults();
 
       if (!data.length) {
-        clearResults();
         displayNoResults();
       } else {
         var results = createResults(data);

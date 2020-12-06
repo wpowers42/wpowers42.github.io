@@ -9,8 +9,8 @@ export default (query) => {
     .then((res) => res.json())
     .then((data) => {
       createEventListeners();
+      clearResults();
       if (!data.length) {
-        clearResults();
         displayNoResults();
       } else {
         const results = createResults(data);
