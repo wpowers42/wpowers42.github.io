@@ -32,7 +32,7 @@ export default class Heatmap {
   fetchData(url) {
     fetch(url)
       .then((response) => response.json())
-      .then((data) => this.processData(data))
+      .then((data) => Heatmap.processData(data))
       .then((data) => this.buildHeatmap(data))
       .then(() => this.addListeners())
       .catch((err) => console.error(err));
@@ -90,10 +90,10 @@ export default class Heatmap {
     return data.map((r) => r.map((i) => i[property]));
   }
 
-  processData(dataArg) {
+  static processData(dataArg) {
     const data = dataArg.filter((e) => e.season_number && e.episode_number);
 
-    let seasons = this.groupBy(data, 'season_number');
+    let seasons = Heatmap.groupBy(data, 'season_number');
     // eslint-disable-next-line max-len
     seasons = Object.values(seasons).map((season) => season.sort((a, b) => a.episode_number - b.episode_number));
 
@@ -102,31 +102,31 @@ export default class Heatmap {
       // eslint-disable-next-line no-console
       console.warn('More than 32 episodes per season, grouping by year...');
 
-      let years = this.groupBy(data, 'start_year');
+      let years = Heatmap.groupBy(data, 'start_year');
       // eslint-disable-next-line max-len
       years = Object.values(years).map((year) => year.sort((a, b) => a.episode_number - b.episode_number));
-      const ratings = this.extractProperty(years, 'average_rating');
-      const titles = this.extractProperty(years, 'primary_title');
-      const tconsts = this.extractProperty(years, 'tconst');
+      const ratings = Heatmap.extractProperty(years, 'average_rating');
+      const titles = Heatmap.extractProperty(years, 'primary_title');
+      const tconsts = Heatmap.extractProperty(years, 'tconst');
 
       return {
-        ratings: this.transpose(ratings),
-        titles: this.transpose(titles, ''),
-        tconsts: this.transpose(tconsts, ''),
+        ratings: Heatmap.transpose(ratings),
+        titles: Heatmap.transpose(titles, ''),
+        tconsts: Heatmap.transpose(tconsts, ''),
       };
     }
-    const ratings = this.extractProperty(seasons, 'average_rating');
-    const titles = this.extractProperty(seasons, 'primary_title');
-    const tconsts = this.extractProperty(seasons, 'tconst');
+    const ratings = Heatmap.extractProperty(seasons, 'average_rating');
+    const titles = Heatmap.extractProperty(seasons, 'primary_title');
+    const tconsts = Heatmap.extractProperty(seasons, 'tconst');
     return {
-      ratings: this.transpose(ratings),
-      titles: this.transpose(titles, ''),
-      tconsts: this.transpose(tconsts, ''),
+      ratings: Heatmap.transpose(ratings),
+      titles: Heatmap.transpose(titles, ''),
+      tconsts: Heatmap.transpose(tconsts, ''),
     };
   }
 
   buildHeatmap(data) {
-    const size = this.size(data.ratings);
+    const size = Heatmap.size(data.ratings);
     const xValues = [...Array(size[1]).keys()].map((x) => ++x);
     const yValues = [...Array(size[0]).keys()].map((x) => ++x);
     const zValues = data.ratings;
