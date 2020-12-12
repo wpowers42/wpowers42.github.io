@@ -1,0 +1,24 @@
+{
+  "name": "wpowers42.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "rollup.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wpowers42/wpowers42.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wpowers42/wpowers42.github.io/issues"
+  },
+  "homepage": "https://github.com/wpowers42/wpowers42.github.io#readme",
+  "devDependencies": {
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}
