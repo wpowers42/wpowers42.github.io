@@ -61,7 +61,7 @@ fetch('https://raw.githubusercontent.com/wpowers42/wpowers42.github.io/main/json
   .then(data => {
     fuzzyhound.setOptions({
       source: data,
-      keys: { title: 'primary_title' }
+      keys: { title: 'title' }
     })
   })
 
