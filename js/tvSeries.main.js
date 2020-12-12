@@ -291,7 +291,7 @@ const handleSubmit = (suggestion) => {
   const { tconst } = suggestion._item;
   const url = `https://willp.herokuapp.com/tv-series/${tconst.toString()}`;
   // eslint-disable-next-line no-unused-vars
-  const hm = Heatmap(url);
+  const hm = new Heatmap(url);
 };
 
 // - - - - - - - - - - -
