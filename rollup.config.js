@@ -17,9 +17,9 @@ export default [{
         format: 'cjs'
     }
 }, {
-    input: 'src/tvSeriesRatings.main.js',
+    input: 'src/tvSeries.main.js',
     output: {
-        file: 'js/tvSeriesRatings.main.js',
+        file: 'js/tvSeries.main.js',
         format: 'cjs'
     }
 }];
