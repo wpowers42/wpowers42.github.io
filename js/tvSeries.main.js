@@ -327,7 +327,7 @@ fetch('https://raw.githubusercontent.com/wpowers42/wpowers42.github.io/main/json
 function handleSubmit(suggestion) {
 
   var tconst = suggestion._item.tconst;
-  var url = `https://wpowers.dev/api/imdb/series/${tconst.toString()}/episodes/`;
+  const url = `https://willp.herokuapp.com/tv-series/${tconst.toString()}`;
   var hm = new Heatmap(url);
 
 }
