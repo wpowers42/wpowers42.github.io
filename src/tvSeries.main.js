@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { Heatmap } from './tvSeries.heatmap';
+import Heatmap from './tvSeries.heatmap';
 
 // eslint-disable-next-line no-undef
 const fuzzyhound = new FuzzySearch({ output_limit: 6, output_map: 'alias' });

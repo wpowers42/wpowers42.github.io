@@ -1,4 +1,3 @@
-
 const age = (birthday) => {
   const then = moment(birthday);
   const now = moment();

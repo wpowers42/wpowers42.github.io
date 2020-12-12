@@ -1,4 +1,4 @@
-import getRhymes from './movies.api.js';
+import getRhymes from './movies.api';
 
 (function main() {
   const searchBox = document.querySelector('.search-box');

@@ -1,6 +1,6 @@
 import {
   createEventListeners, clearResults, displayNoResults, createResults, displayResults,
-} from './movie.dom.js';
+} from './movie.dom';
 
 export default (query) => {
   const url = `https://willp.herokuapp.com/puns/${query}`;
