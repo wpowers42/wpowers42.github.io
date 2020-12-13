@@ -4,70 +4,106 @@ import Heatmap from './tvSeries.heatmap';
 // eslint-disable-next-line no-undef
 const fuzzyhound = new FuzzySearch({ output_limit: 6, output_map: 'alias' });
 
-// - - - - - - - - - - - - - - - - - - - - - - -
-//    Item template
-// - - - - - - - - - - - - - - - - - - - - - - -
-
-function itemTemplate(suggestion) {
-  return [
-    '<div>',
-    "<span class='title'>\"", fuzzyhound.highlight(suggestion.title, 'title'), '"</span>',
-    "<span class='author'>", (suggestion.author) ? ` by ${fuzzyhound.highlight(suggestion.author, 'author')}` : '', '</span>',
-    "<span class='score' title='", suggestion._match, "'>(&nbsp;", suggestion._score.toFixed(2), '&nbsp;)</span>',
-    '</div>',
-  ].join('');
-}
-
-//
-// Use footer to show some performance stats
-//
-
-function footerTemplate() {
-  const renderEnd = Date.now();
-  return `${"<div class='typeahead-footer'> "
-    + 'Search took <strong>'}${fuzzyhound.search_time.toFixed(3)} ms</strong><br>`
-    + `Total (search+highlight+render):  <strong>${(renderEnd - fuzzyhound.start_time).toFixed(3)} ms</strong><br>`
-    + `Query: <strong>${fuzzyhound.query.normalized.length}</strong> chars <br>`
-    + `Source contain ${fuzzyhound.source.length} Items<br>`
-    + '</div>';
-}
-
-const handleSubmit = (suggestion) => {
-  const { tconst } = suggestion._item;
-  const url = `https://willp.herokuapp.com/tv-series/${tconst.toString()}`;
-  // eslint-disable-next-line no-unused-vars
-  const hm = new Heatmap(url);
-};
-
-// - - - - - - - - - - -
-//   Typeahead Setup
-// - - - - - - - - - - -
-
-$('#demo-query').typeahead({
-  minLength: 2,
-  highlight: false, // we'll use FuzzySearch highlight instead
-},
-{
-  name: 'books',
-  limit: 100, // let fuzzyhound.output_limit apply limit
-  source: fuzzyhound,
-  display: 'title',
-  templates: {
-    suggestion: itemTemplate,
-    footer: footerTemplate,
-    pending: '',
-  },
-
-}).bind('typeahead:select', (ev, suggestion) => {
-  document.activeElement.blur();
-  handleSubmit(suggestion);
-});
-
 fetch('https://raw.githubusercontent.com/wpowers42/wpowers42.github.io/main/json/series.json')
   .then((res) => res.json())
   .then((data) => {
     fuzzyhound.setOptions({
       source: data,
       keys: { title: 'title' },
+      output_map: 'item',
     });
   });
+
+const suggestions = document.querySelector('.search-suggestions');
+const searchInput = document.querySelector('#search-input');
+
+const updateSuggestions = (value) => {
+  const results = fuzzyhound.search(value);
+  const frag = document.createDocumentFragment();
+  if (results.length) {
+    suggestions.classList.add('active');
+  }
+  results.forEach((result) => {
+    const resultContainer = document.createElement('div');
+    resultContainer.className = 'result-container';
+    resultContainer.setAttribute('data-tconst', result.tconst);
+    resultContainer.setAttribute('data-title', result.title);
+    const titleContainer = document.createElement('div');
+    titleContainer.className = 'title-container';
+    titleContainer.innerHTML = fuzzyhound.highlight(result.title, 'title');
+    const yearsContainer = document.createElement('div');
+    yearsContainer.className = 'years-container';
+    yearsContainer.innerText = result.years;
+    resultContainer.append(titleContainer);
+    resultContainer.append(yearsContainer);
+    frag.appendChild(resultContainer);
+  });
+  suggestions.innerHTML = '';
+  suggestions.appendChild(frag);
+};
+
+searchInput.addEventListener('input', (event) => {
+  const { value } = event.target;
+  updateSuggestions(value);
+});
+
+searchInput.addEventListener('focusin', () => {
+  searchInput.value = '';
+});
+
+const highlightSuggestion = (event) => {
+  // eslint-disable-next-line no-nested-ternary
+  const direction = event.which === 40 ? 1 : event.which === 38 ? -1 : 0;
+  if (suggestions.length === 0) return;
+  const selected = document.querySelector('.selected');
+  let next;
+  if (selected) {
+    selected.classList.remove('selected');
+    if (direction === 1) {
+      next = selected.nextSibling ? selected.nextSibling : suggestions.firstChild;
+    } else if (direction === -1) {
+      next = selected.previousSibling ? selected.previousSibling : suggestions.lastChild;
+    }
+  } else if (direction === 1) {
+    next = suggestions.firstChild;
+  } else if (direction === -1) {
+    next = suggestions.lastChild;
+  }
+  if (next) {
+    next.classList.add('selected');
+    const title = next.getAttribute('data-title');
+    searchInput.value = title;
+  }
+};
+
+const submitSelection = () => {
+  const selected = document.querySelector('.selected');
+  const tconst = selected.getAttribute('data-tconst');
+  suggestions.classList.remove('active');
+  suggestions.innerHTML = '';
+  searchInput.blur();
+  const url = `https://willp.herokuapp.com/tv-series/${tconst.toString()}`;
+  // eslint-disable-next-line no-unused-vars
+  const hm = new Heatmap(url);
+};
+
+window.addEventListener('keydown', (event) => {
+  if (event.which === 13) {
+    submitSelection(event);
+  }
+});
+window.addEventListener('keydown', (event) => highlightSuggestion(event));
+
+suggestions.addEventListener('click', (event) => {
+  submitSelection(event);
+});
+
+suggestions.addEventListener('mouseover', (event) => {
+  const { parentElement } = event.target;
+  if (parentElement.classList.contains('result-container')) {
+    Array.from(suggestions.children).forEach((child) => {
+      child.classList.remove('selected');
+    });
+    parentElement.classList.add('selected');
+  }
+});
