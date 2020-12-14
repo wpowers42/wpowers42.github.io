@@ -1,243 +1,120 @@
 'use strict';
 
-class Heatmap {
-  constructor(seriesUrl) {
-    this.seriesUrl = seriesUrl;
-    this.div = document.getElementById('plotlyDiv');
-    this.fetchData(this.seriesUrl);
-  }
+const colorscaleValue = [
+  [0.00, { r: 238, g: 238, b: 238 }],
+  [0.01, { r: 210, g: 34, b: 45 }],
+  [0.40, { r: 210, g: 34, b: 45 }],
+  [0.65, { r: 255, g: 191, b: 0 }],
+  [1.00, { r: 35, g: 136, b: 35 }],
+];
 
-  addListeners() {
-    if (window.innerWidth <= 600) {
-      return;
-    }
-    const plotElement = this.div;
-    plotElement.on('plotly_click', (data) => {
-      const point = data.points[0];
-      if (point) {
-        const customData = point.customdata;
-        if (customData) {
-          window.open(`https://www.imdb.com/title/${point.customdata}`);
-        }
-      }
-    });
-    const dragLayer = document.getElementsByClassName('nsewdrag')[0];
-    plotElement.on('plotly_hover', () => {
-      dragLayer.style.cursor = 'pointer';
-    });
+const numInRange = (pct, numStart, numEnd) => numStart - (numStart - numEnd) * pct;
 
-    plotElement.on('plotly_unhover', () => {
-      dragLayer.style.cursor = '';
-    });
-  }
+const ratingColorScale = (colorArr, ratingPct) => {
+  const low = [...[...colorArr].reverse().find((color) => color[0] <= ratingPct)];
+  const high = [...colorArr.find((color) => color[0] >= ratingPct)];
+  return ([low, high]);
+};
+const getColor = (rating, colorArr = colorscaleValue) => {
+  const ratingPct = rating / 10;
+  const [low, high] = ratingColorScale(colorArr, ratingPct);
+  const rangePct = (ratingPct - low[0]) / (high[0] - low[0]);
+  const color = {};
+  ['r', 'g', 'b'].forEach((c) => {
+    const c1 = low[1][c];
+    const c2 = high[1][c];
+    const c3 = c1 === c2 ? c1 : numInRange(rangePct, c1, c2);
+    color[c] = c3;
+  });
+  return color;
+};
 
-  fetchData(url) {
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => Heatmap.processData(data))
-      .then((data) => this.buildHeatmap(data))
-      .then(() => this.addListeners())
-      .catch((err) => console.error(err));
-  }
+// const gridContainer = document.querySelector('#heatmap-grid-container');
+// gridContainer.addEventListener('mouseover', (event) => {
+//   console.log(event.target.getAttribute('data-primary-title'));
+// });
 
-  static createEmptyTwoDimArray(size, fill = null) {
-    const twoDimArray = (new Array(size[0])
-      .fill(fill)
-      .map(() => new Array(size[1])
-        .fill(fill)));
-    return twoDimArray;
-  }
+const createEpisodeDetail = (episode) => {
+  // container
+  const episodeDetail = document.createElement('div');
+  episodeDetail.className = 'episode-detail';
 
-  static transpose(matrix) {
-    return matrix[0].map((col, i) => matrix.map((row) => row[i]));
-  }
+  // Season and Episode
+  const seasonEpisode = document.createElement('div');
+  seasonEpisode.textContent = `S${episode.season_number} E${episode.episode_number}`;
+  seasonEpisode.className = 'episode-detail-season-episode';
 
-  static size(matrix) {
-    const rowCount = matrix.length;
-    const rowSizes = [];
-    for (let i = 0; i < rowCount; i++) {
-      if (!matrix[i]) {
-        rowSizes.push(0);
-      } else {
-        rowSizes.push(matrix[i].length);
-      }
-    }
-    return [rowCount, Math.max.apply(null, rowSizes)];
-  }
+  // Title and Year
+  const titleYear = document.createElement('div');
+  titleYear.textContent = `${episode.primary_title} (${episode.start_year})`;
+  titleYear.className = 'episode-detail-title-year';
 
-  static merge(matrixSrc, matrixTarg) {
-    matrixSrc.forEach((row, index) => {
-      row.forEach((value, rIndex) => {
-        // eslint-disable-next-line no-param-reassign
-        matrixTarg[index][rIndex] = value;
-      });
-    });
-    return matrixTarg;
-  }
+  // Rating and Votes
+  const ratingVotes = document.createElement('div');
+  ratingVotes.textContent = `${episode.average_rating}/10 (${episode.number_votes} votes)`;
+  ratingVotes.className = 'episode-detail-rating-votes';
 
-  static groupBy(items, key) {
-    return items.reduce(
-      (result, item) => ({
-        ...result,
-        [item[key]]: [
-          ...(result[item[key]] || []),
-          item,
-        ],
-      }),
-      {},
-    );
-  }
+  // parent_tconst
+  // tconst
 
-  static extractProperty(data, property) {
-    return data.map((r) => r.map((i) => i[property]));
-  }
+  // appends
+  episodeDetail.append(seasonEpisode);
+  episodeDetail.append(titleYear);
+  episodeDetail.append(ratingVotes);
 
-  static processData(dataArg) {
-    const data = dataArg.filter((e) => e.season_number && e.episode_number);
+  // return
+  return episodeDetail;
+};
 
-    let seasons = Heatmap.groupBy(data, 'season_number');
-    // eslint-disable-next-line max-len
-    seasons = Object.values(seasons).map((season) => season.sort((a, b) => a.episode_number - b.episode_number));
+const createGrid = (data) => {
+  const gridContainer = document.querySelector('#heatmap-grid-container');
+  gridContainer.innerHTML = '';
 
-    const maxLength = Math.max(...seasons.map((s) => s.length));
-    if (maxLength > 32) {
-      // eslint-disable-next-line no-console
-      console.warn('More than 32 episodes per season, grouping by year...');
+  const grid = document.createElement('div');
+  const columns = Math.max(...data.map((o) => o.season_number));
+  const rows = Math.max(...data.map((o) => o.episode_number));
 
-      let years = Heatmap.groupBy(data, 'start_year');
-      // eslint-disable-next-line max-len
-      years = Object.values(years).map((year) => year.sort((a, b) => a.episode_number - b.episode_number));
-      const ratings = Heatmap.extractProperty(years, 'average_rating');
-      const titles = Heatmap.extractProperty(years, 'primary_title');
-      const tconsts = Heatmap.extractProperty(years, 'tconst');
+  const gridCss = {
+    width: '90%',
+    height: '600px',
+    display: 'grid',
+    'grid-template-columns': `repeat(${columns}, ${100 / columns}%)`,
+    'grid-template-rows': `repeat(${rows}, ${100 / rows}%)`,
+    margin: 'auto',
+  };
+  Object.keys(gridCss).forEach((style) => {
+    grid.style[style] = gridCss[style];
+  });
 
-      return {
-        ratings: Heatmap.transpose(ratings),
-        titles: Heatmap.transpose(titles, ''),
-        tconsts: Heatmap.transpose(tconsts, ''),
-      };
-    }
-    const ratings = Heatmap.extractProperty(seasons, 'average_rating');
-    const titles = Heatmap.extractProperty(seasons, 'primary_title');
-    const tconsts = Heatmap.extractProperty(seasons, 'tconst');
-    return {
-      ratings: Heatmap.transpose(ratings),
-      titles: Heatmap.transpose(titles, ''),
-      tconsts: Heatmap.transpose(tconsts, ''),
+  data.forEach((episode) => {
+    const episodeCell = document.createElement('div');
+    episodeCell.className = 'episode-cell';
+    const episodeDetail = createEpisodeDetail(episode);
+    const tooltipPosition = episode.season_number / columns > 0.50 ? 'left' : 'right';
+    episodeDetail.classList.add(`tooltip-${tooltipPosition}`);
+    const rgb = getColor(episode.average_rating);
+    const episodeCss = {
+      'grid-column': episode.season_number,
+      'grid-row': -episode.episode_number + rows + 1,
+      'background-color': `rgb(${rgb.r},${rgb.g},${rgb.b})`,
     };
-  }
+    Object.keys(episodeCss).forEach((style) => {
+      episodeCell.style[style] = episodeCss[style];
+    });
+    episodeCell.append(episodeDetail);
+    grid.append(episodeCell);
+  });
 
-  buildHeatmap(data) {
-    const size = Heatmap.size(data.ratings);
-    const xValues = [...Array(size[1]).keys()].map((x) => ++x);
-    const yValues = [...Array(size[0]).keys()].map((x) => ++x);
-    const zValues = data.ratings;
-
-    const colorscaleValue = [
-      [0.00, '#EEEEEE'],
-      [0.01, '#D2222D'],
-      [0.40, '#D2222D'],
-      [0.65, '#FFBF00'],
-      [1.00, '#238823'],
-    ];
-
-    const smallScreen = window.innerWidth <= 600;
-
-    const plotlyData = [{
-      x: xValues,
-      y: yValues,
-      z: zValues,
-      customdata: data.tconsts,
-      text: data.titles,
-      hovertemplate: (`
-          <b>Season %{x}, Episode %{y}</b><br>
-          <b>Title:</b> %{text}<br>
-          <b>Rating:</b> %{z}<extra></extra>`),
-      hoverongaps: false,
-      type: 'heatmap',
-      colorbar: {
-        thickness: 30,
-        title: {
-          text: 'Rating',
-          side: 'right',
-        },
-        ypad: 0,
-      },
-      showscale: !smallScreen,
-      colorscale: colorscaleValue,
-      opacity: 0.90,
-      zmin: 1,
-      zmax: 10,
-      xgap: 2,
-      ygap: 2,
-    }];
-
-    const layout = {
-      title: {
-        text: 'Episode Ratings',
-        font: {
-          size: smallScreen ? 18 : 28,
-        },
-      },
-      annotations: [],
-      xaxis: {
-        showgrid: false,
-        title: {
-          text: 'Season',
-        },
-        side: 'bottom',
-        tickmode: 'linear',
-        automargin: true,
-      },
-      yaxis: {
-        showgrid: false,
-        title: {
-          text: 'Episode',
-        },
-        tickmode: 'linear',
-        automargin: true,
-      },
-      margin: {
-        l: smallScreen ? 0 : 50,
-        r: smallScreen ? 0 : 50,
-        t: smallScreen ? 30 : 50,
-        b: smallScreen ? 0 : 50,
-        pad: 0,
-        autoexpand: true,
-      },
-      dragmode: !smallScreen,
-    };
-
-    for (let i = 0; i < yValues.length; i++) {
-      for (let j = 0; j < xValues.length; j++) {
-        const currentValue = zValues[i][j];
-        const textColor = 'white';
-        const result = {
-          xref: 'x1',
-          yref: 'y1',
-          x: xValues[j],
-          y: yValues[i],
-          text: currentValue || 'NA',
-          font: {
-            family: 'Arial',
-            size: 12,
-            color: textColor,
-          },
-          showarrow: false,
-        };
-        layout.annotations.push(result);
-      }
-    }
-
-    const config = {
-      responsive: true,
-      displayModeBar: !smallScreen,
-      autosizable: true,
-    };
-    // eslint-disable-next-line no-undef
-    Plotly.newPlot(this.div, plotlyData, layout, config);
-  }
-}
+  gridContainer.append(grid);
+};
+const getEpisodes = (tconst = 'tt0944947') => {
+  const url = `https://willp.herokuapp.com/tv-series/${tconst}`;
+  fetch(url)
+    .then((data) => data.json())
+    .then((episodes) => {
+      createGrid(episodes);
+    });
+};
 
 /* eslint-disable no-underscore-dangle */
 
@@ -251,6 +128,7 @@ fetch('https://raw.githubusercontent.com/wpowers42/wpowers42.github.io/main/json
       source: data,
       keys: { title: 'title' },
       output_map: 'item',
+      token_field_min_length: 2,
     });
   });
 
@@ -324,7 +202,8 @@ const submitSelection = () => {
   searchInput.blur();
   const url = `https://willp.herokuapp.com/tv-series/${tconst.toString()}`;
   // eslint-disable-next-line no-unused-vars
-  const hm = new Heatmap(url);
+  // const hm = new Heatmap(url);
+  getEpisodes(tconst);
 };
 
 window.addEventListener('keydown', (event) => {

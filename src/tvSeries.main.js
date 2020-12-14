@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import Heatmap from './tvSeries.heatmap';
+import { getEpisodes } from './tvSeries.grid';
 
 // eslint-disable-next-line no-undef
 const fuzzyhound = new FuzzySearch({ output_limit: 6, output_map: 'alias' });
@@ -11,6 +12,7 @@ fetch('https://raw.githubusercontent.com/wpowers42/wpowers42.github.io/main/json
       source: data,
       keys: { title: 'title' },
       output_map: 'item',
+      token_field_min_length: 2,
     });
   });
 
@@ -84,7 +86,8 @@ const submitSelection = () => {
   searchInput.blur();
   const url = `https://willp.herokuapp.com/tv-series/${tconst.toString()}`;
   // eslint-disable-next-line no-unused-vars
-  const hm = new Heatmap(url);
+  // const hm = new Heatmap(url);
+  getEpisodes(tconst);
 };
 
 window.addEventListener('keydown', (event) => {

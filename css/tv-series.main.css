@@ -46,10 +46,6 @@
     cursor: pointer;
 }
 
-/* .result-container:hover {
-    background-color: #e9e9e9;
-} */
-
 .selected {
     background-color: DodgerBlue;
     color: #ffffff;
@@ -58,3 +54,42 @@
 .title-container {}
 
 .years-container {}
+
+.episode-cell {
+    position: relative;
+    transition: transform .2s;
+}
+
+.episode-cell:active,
+.episode-cell:hover {
+    transform: scale(1.25);
+    z-index: 1;
+    border: 1px black solid;
+}
+
+.episode-detail {
+    display: none;
+    position: absolute;
+    top: 0;
+    min-width: 300px;
+    min-height: 100px;
+    background-color: rgba(230, 230, 230, 0.80);
+    z-index: 1;
+    transform: translateX(50%);
+}
+
+.episode-detail.tooltip-left {
+    right: 0;
+    transform: translateX(-50%);
+}
+
+.episode-detail.tooltip-right {
+    left: 0;
+    transform: translateX(50%);
+}
+
+.episode-cell:active .episode-detail,
+.episode-cell:hover .episode-detail {
+    display: block;
+    transform: scale(0.75);
+}
