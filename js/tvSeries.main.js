@@ -29,10 +29,19 @@ const getColor = (rating, colorArr = colorscaleValue) => {
   return color;
 };
 
-// const gridContainer = document.querySelector('#heatmap-grid-container');
-// gridContainer.addEventListener('mouseover', (event) => {
-//   console.log(event.target.getAttribute('data-primary-title'));
-// });
+const gridContainer = document.querySelector('#heatmap-grid-container');
+gridContainer.addEventListener('click', (event) => {
+  const url = 'https://www.imdb.com/title/';
+  const parentOne = event.target.parentElement;
+  const parentTwo = parentOne.parentElement;
+  if (event.target.classList.contains('episode-cell')) {
+    window.open(`${url}${event.target.getAttribute('data-tconst')}`, '_blank');
+  } else if (parentOne.classList.contains('episode-cell')) {
+    window.open(`${url}${parentOne.getAttribute('data-tconst')}`, '_blank');
+  } else if (parentTwo.classList.contains('episode-cell')) {
+    window.open(`${url}${parentTwo.getAttribute('data-tconst')}`, '_blank');
+  }
+});
 
 const createEpisodeDetail = (episode) => {
   // container
@@ -76,7 +85,7 @@ const createGrid = (data) => {
 
   const gridCss = {
     width: '90%',
-    height: '600px',
+    height: '70vh',
     display: 'grid',
     'grid-template-columns': `repeat(${columns}, ${100 / columns}%)`,
     'grid-template-rows': `repeat(${rows}, ${100 / rows}%)`,
@@ -89,6 +98,7 @@ const createGrid = (data) => {
   data.forEach((episode) => {
     const episodeCell = document.createElement('div');
     episodeCell.className = 'episode-cell';
+    episodeCell.setAttribute('data-tconst', episode.tconst);
     const episodeDetail = createEpisodeDetail(episode);
     const tooltipPosition = episode.season_number / columns > 0.50 ? 'left' : 'right';
     episodeDetail.classList.add(`tooltip-${tooltipPosition}`);

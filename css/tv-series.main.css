@@ -67,6 +67,7 @@
     border: 1px black solid;
 }
 
+/* black background, white text? */
 .episode-detail {
     display: none;
     position: absolute;
