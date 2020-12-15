@@ -1,3 +1,10 @@
+const registerFocus = (suggestions) => {
+  suggestions.input.addEventListener('focusin', () => {
+    // eslint-disable-next-line no-param-reassign
+    suggestions.input.value = '';
+  });
+};
+
 const registerInput = (suggestions) => {
   suggestions.input.addEventListener('input', (event) => {
     const { value } = event.target;
@@ -43,5 +50,6 @@ const registerHoverContainer = (container, suggestions) => {
 };
 
 export {
-  registerInput, registerKeyDown, registerClickContainer, registerHoverContainer,
+  registerFocus, registerInput, registerKeyDown, registerClickContainer,
+  registerHoverContainer,
 };

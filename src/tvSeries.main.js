@@ -1,6 +1,7 @@
 import Suggestions from './tvSeries.Suggestions';
 import {
-  registerKeyDown, registerClickContainer, registerHoverContainer, registerInput,
+  registerFocus, registerKeyDown, registerClickContainer, registerHoverContainer,
+  registerInput,
 } from './tvSeries.events';
 
 const suggestions = new Suggestions(
@@ -8,10 +9,7 @@ const suggestions = new Suggestions(
   document.querySelector('.search-suggestions'),
 );
 
-suggestions.input.addEventListener('focusin', () => {
-  suggestions.input.value = '';
-});
-
+registerFocus(suggestions);
 registerInput(suggestions);
 registerKeyDown(suggestions, () => suggestions.submit());
 registerClickContainer(suggestions.container, () => suggestions.submit());
