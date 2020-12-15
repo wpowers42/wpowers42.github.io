@@ -1,3 +1,10 @@
+const registerInput = (suggestions) => {
+  suggestions.input.addEventListener('input', (event) => {
+    const { value } = event.target;
+    suggestions.update(value);
+  });
+};
+
 const registerKeyDown = (suggestions, submit) => {
   window.addEventListener('keydown', (event) => {
     if (event.which === 13) {
@@ -32,14 +39,9 @@ const registerHoverContainer = (container, suggestions) => {
       previousSibling = previousSibling.previousSibling;
     }
     suggestions.updateSelection(null, i + 1);
-
-    // if (parentElement.classList.contains('result-container')) {
-    //   Array.from(container.children).forEach((child) => {
-    //     child.classList.remove('selected');
-    //   });
-    //   parentElement.classList.add('selected');
-    // }
   });
 };
 
-export { registerKeyDown, registerClickContainer, registerHoverContainer };
+export {
+  registerInput, registerKeyDown, registerClickContainer, registerHoverContainer,
+};

@@ -3,7 +3,7 @@
 }
 
 .search-box {
-    max-width: 400px;
+    max-width: 500px;
     margin: auto;
     position: relative;
 }
@@ -55,16 +55,20 @@
 
 .years-container {}
 
+#heatmap-grid-container {
+    padding: 2%;
+}
+
 .episode-cell {
     position: relative;
-    transition: transform .2s;
+    transition: transform .1s;
 }
 
 .episode-cell:active,
 .episode-cell:hover {
-    transform: scale(1.25);
+    /* transform: scale(1.05); */
     z-index: 1;
-    border: 1px black solid;
+    border: 2px black solid;
 }
 
 /* black background, white text? */

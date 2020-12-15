@@ -64,6 +64,7 @@ export default class Suggestions {
   }
 
   update() {
+    this.selection = 0;
     const results = this.fuzzyhound.search(this.input.value);
     const frag = document.createDocumentFragment();
     if (results.length) {
