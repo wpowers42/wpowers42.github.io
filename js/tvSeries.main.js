@@ -126,113 +126,164 @@ const getEpisodes = (tconst = 'tt0944947') => {
     });
 };
 
-/* eslint-disable no-underscore-dangle */
-
-// eslint-disable-next-line no-undef
-const fuzzyhound = new FuzzySearch({ output_limit: 6, output_map: 'alias' });
-
-fetch('https://raw.githubusercontent.com/wpowers42/wpowers42.github.io/main/json/series.json')
-  .then((res) => res.json())
-  .then((data) => {
-    fuzzyhound.setOptions({
-      source: data,
-      keys: { title: 'title' },
-      output_map: 'item',
-      token_field_min_length: 2,
-    });
-  });
-
-const suggestions = document.querySelector('.search-suggestions');
-const searchInput = document.querySelector('#search-input');
-
-const updateSuggestions = (value) => {
-  const results = fuzzyhound.search(value);
-  const frag = document.createDocumentFragment();
-  if (results.length) {
-    suggestions.classList.add('active');
+class Suggestions {
+  // pass in the search input box and suggestions div
+  constructor(input, container) {
+    this.input = input;
+    this.query = null;
+    this.selection = 0;
+    this.container = container;
+    // eslint-disable-next-line no-undef
+    this.fuzzyhound = new FuzzySearch({ output_limit: 6, output_map: 'alias' });
+    // load the tv series data
+    this.seriesData();
   }
-  results.forEach((result) => {
-    const resultContainer = document.createElement('div');
-    resultContainer.className = 'result-container';
-    resultContainer.setAttribute('data-tconst', result.tconst);
-    resultContainer.setAttribute('data-title', result.title);
-    const titleContainer = document.createElement('div');
-    titleContainer.className = 'title-container';
-    titleContainer.innerHTML = fuzzyhound.highlight(result.title, 'title');
-    const yearsContainer = document.createElement('div');
-    yearsContainer.className = 'years-container';
-    yearsContainer.innerText = result.years;
-    resultContainer.append(titleContainer);
-    resultContainer.append(yearsContainer);
-    frag.appendChild(resultContainer);
-  });
-  suggestions.innerHTML = '';
-  suggestions.appendChild(frag);
-};
 
-searchInput.addEventListener('input', (event) => {
-  const { value } = event.target;
-  updateSuggestions(value);
-});
+  // get the tv series json and load into fuzzyhound
+  seriesData() {
+    fetch('https://raw.githubusercontent.com/wpowers42/wpowers42.github.io/main/json/series.json')
+      .then((res) => res.json())
+      .then((data) => {
+        this.fuzzyhound.setOptions({
+          source: data,
+          keys: { title: 'title' },
+          output_map: 'item',
+          token_field_min_length: 2,
+        });
+      });
+  }
 
-searchInput.addEventListener('focusin', () => {
-  searchInput.value = '';
-});
-
-const highlightSuggestion = (event) => {
-  // eslint-disable-next-line no-nested-ternary
-  const direction = event.which === 40 ? 1 : event.which === 38 ? -1 : 0;
-  if (suggestions.length === 0) return;
-  const selected = document.querySelector('.selected');
-  let next;
-  if (selected) {
-    selected.classList.remove('selected');
-    if (direction === 1) {
-      next = selected.nextSibling ? selected.nextSibling : suggestions.firstChild;
-    } else if (direction === -1) {
-      next = selected.previousSibling ? selected.previousSibling : suggestions.lastChild;
+  highlightSelection(priorSelection, explicit = false) {
+    // get result elements
+    const results = Array.from(this.container.children);
+    // if the last selection wasn't input field, remove selected
+    if (priorSelection !== 0) {
+      results[priorSelection - 1].classList.remove('selected');
+    } else {
+      this.query = this.input.value; // save to restore query later
     }
-  } else if (direction === 1) {
-    next = suggestions.firstChild;
-  } else if (direction === -1) {
-    next = suggestions.lastChild;
+
+    // if new selection isn't input field, add selected class
+    if (this.selection !== 0) {
+      const selection = results[this.selection - 1];
+      selection.classList.add('selected');
+      if (!explicit) this.input.value = selection.getAttribute('data-title');
+    } else {
+      this.input.value = this.query; // restore query
+    }
   }
-  if (next) {
-    next.classList.add('selected');
-    const title = next.getAttribute('data-title');
-    searchInput.value = title;
+
+  updateSelection(direction, explicit = null) {
+    if (!direction && typeof (direction) === 'number') return;
+    // add rule to return if not results available
+    const priorSelection = this.selection;
+    this.selection += direction;
+    if (this.selection < 0) {
+      this.selection = this.fuzzyhound.results.length;
+    } else if (this.selection > this.fuzzyhound.results.length) {
+      this.selection = 0;
+    }
+    if (explicit) {
+      this.selection = explicit;
+    }
+    this.highlightSelection(priorSelection, explicit);
   }
-};
 
-const submitSelection = () => {
-  const selected = document.querySelector('.selected');
-  const tconst = selected.getAttribute('data-tconst');
-  suggestions.classList.remove('active');
-  suggestions.innerHTML = '';
-  searchInput.blur();
-  const url = `https://willp.herokuapp.com/tv-series/${tconst.toString()}`;
-  // eslint-disable-next-line no-unused-vars
-  // const hm = new Heatmap(url);
-  getEpisodes(tconst);
-};
-
-window.addEventListener('keydown', (event) => {
-  if (event.which === 13) {
-    submitSelection();
-  }
-});
-window.addEventListener('keydown', (event) => highlightSuggestion(event));
-
-suggestions.addEventListener('click', (event) => {
-  submitSelection();
-});
-
-suggestions.addEventListener('mouseover', (event) => {
-  const { parentElement } = event.target;
-  if (parentElement.classList.contains('result-container')) {
-    Array.from(suggestions.children).forEach((child) => {
-      child.classList.remove('selected');
+  update() {
+    const results = this.fuzzyhound.search(this.input.value);
+    const frag = document.createDocumentFragment();
+    if (results.length) {
+      this.container.classList.add('active');
+    }
+    results.forEach((result) => {
+      const resultContainer = document.createElement('div');
+      resultContainer.className = 'result-container';
+      resultContainer.setAttribute('data-tconst', result.tconst);
+      resultContainer.setAttribute('data-title', result.title);
+      const titleContainer = document.createElement('div');
+      titleContainer.className = 'title-container';
+      titleContainer.innerHTML = this.fuzzyhound.highlight(result.title, 'title');
+      const yearsContainer = document.createElement('div');
+      yearsContainer.className = 'years-container';
+      yearsContainer.innerText = result.years;
+      resultContainer.append(titleContainer);
+      resultContainer.append(yearsContainer);
+      frag.appendChild(resultContainer);
     });
-    parentElement.classList.add('selected');
+    this.container.innerHTML = '';
+    this.container.appendChild(frag);
   }
+
+  submit() {
+    const selected = document.querySelector('.selected');
+    const tconst = selected.getAttribute('data-tconst');
+    const title = selected.getAttribute('data-title');
+    this.input.value = title;
+    this.container.classList.remove('active');
+    this.container.innerHTML = '';
+    this.container.blur();
+    getEpisodes(tconst);
+  }
+}
+
+const registerKeyDown = (suggestions, submit) => {
+  window.addEventListener('keydown', (event) => {
+    if (event.which === 13) {
+      submit();
+    }
+    if (event.which === 40) {
+      suggestions.updateSelection(1);
+    }
+    if (event.which === 38) {
+      suggestions.updateSelection(-1);
+    }
+  });
+};
+
+const registerClickContainer = (container, submit) => {
+  container.addEventListener('click', () => {
+    submit();
+  });
+};
+
+const registerHoverContainer = (container, suggestions) => {
+  container.addEventListener('mouseover', (event) => {
+    let { target } = event;
+    if (target === event.currentTarget) return;
+    while (!target.classList.contains('result-container') && target) {
+      target = target.parentElement;
+    }
+    let i = 0;
+    let { previousSibling } = target;
+    while (previousSibling !== null) {
+      i += 1;
+      previousSibling = previousSibling.previousSibling;
+    }
+    suggestions.updateSelection(null, i + 1);
+
+    // if (parentElement.classList.contains('result-container')) {
+    //   Array.from(container.children).forEach((child) => {
+    //     child.classList.remove('selected');
+    //   });
+    //   parentElement.classList.add('selected');
+    // }
+  });
+};
+
+const suggestions = new Suggestions(
+  document.querySelector('#search-input'),
+  document.querySelector('.search-suggestions'),
+);
+
+suggestions.input.addEventListener('input', (event) => {
+  const { value } = event.target;
+  suggestions.update(value);
 });
+
+suggestions.input.addEventListener('focusin', () => {
+  suggestions.input.value = '';
+});
+
+registerKeyDown(suggestions, () => suggestions.submit());
+registerClickContainer(suggestions.container, () => suggestions.submit());
+registerHoverContainer(suggestions.container, suggestions);
