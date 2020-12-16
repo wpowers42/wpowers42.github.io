@@ -274,6 +274,10 @@ const createEpisodeDetail$1 = (dataset) => {
   return episodeDetail;
 };
 
+// credit to Timothy Huang for this regex test:
+// https://dev.to/timhuang/a-simple-way-to-detect-if-browser-is-on-a-mobile-device-with-javascript-44j3
+const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 const registerFocus = (suggestions) => {
   suggestions.input.addEventListener('focusin', () => {
     suggestions.input.select();
@@ -308,6 +312,7 @@ const registerClickContainer = (container, submit) => {
 };
 
 const registerClickGrid = () => {
+  if (isMobile()) return;
   const gridContainer = document.querySelector('#heatmap-grid-container');
   gridContainer.addEventListener('click', (event) => {
     const url = 'https://www.imdb.com/title/';

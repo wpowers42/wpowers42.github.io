@@ -1,4 +1,5 @@
 import { createEpisodeDetail } from './tvSeries.episodeDetail';
+import { isMobile } from './utils';
 
 const registerFocus = (suggestions) => {
   suggestions.input.addEventListener('focusin', () => {
@@ -34,6 +35,7 @@ const registerClickContainer = (container, submit) => {
 };
 
 const registerClickGrid = () => {
+  if (isMobile()) return;
   const gridContainer = document.querySelector('#heatmap-grid-container');
   gridContainer.addEventListener('click', (event) => {
     const url = 'https://www.imdb.com/title/';
