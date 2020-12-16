@@ -1,19 +1,5 @@
 import { getColor } from './tvSeries.color';
 
-const gridContainer = document.querySelector('#heatmap-grid-container');
-gridContainer.addEventListener('click', (event) => {
-  const url = 'https://www.imdb.com/title/';
-  const parentOne = event.target.parentElement;
-  const parentTwo = parentOne.parentElement;
-  if (event.target.classList.contains('episode-cell')) {
-    window.open(`${url}${event.target.getAttribute('data-tconst')}`, '_blank');
-  } else if (parentOne.classList.contains('episode-cell')) {
-    window.open(`${url}${parentOne.getAttribute('data-tconst')}`, '_blank');
-  } else if (parentTwo.classList.contains('episode-cell')) {
-    window.open(`${url}${parentTwo.getAttribute('data-tconst')}`, '_blank');
-  }
-});
-
 const createEpisodeDetail = (episode) => {
   // container
   const episodeDetail = document.createElement('div');
@@ -46,43 +32,71 @@ const createEpisodeDetail = (episode) => {
   return episodeDetail;
 };
 
+const createLabels = (labels, grid, type) => {
+  labels.forEach((label) => {
+    const labelCell = document.createElement('div');
+    labelCell.className = `label-${type}`;
+    labelCell.textContent = label;
+    labelCell.style['grid-column'] = type === 'row' ? 1 : 1 + label;
+    labelCell.style['grid-row'] = type === 'row' ? labels.length + 1 - label : -2;
+    grid.append(labelCell);
+  });
+};
+
 const createGrid = (data) => {
   const gridContainer = document.querySelector('#heatmap-grid-container');
   gridContainer.innerHTML = '';
 
   const grid = document.createElement('div');
-  const columns = Math.max(...data.map((o) => o.season_number));
-  const rows = Math.max(...data.map((o) => o.episode_number));
+  grid.className = 'heatmap-grid';
+  const columns = Math.max(...data.map((o) => o.season_number)) + 1;
+  const rows = Math.max(...data.map((o) => o.episode_number)) + 1;
+  const maxColumnWidth = 100;
+  const maxWidth = columns * maxColumnWidth;
+  const maxRowHeight = 100;
+  const maxHeight = rows * maxRowHeight;
 
   const gridCss = {
-    width: '90%',
-    height: '70vh',
-    display: 'grid',
-    'grid-template-columns': `repeat(${columns}, ${100 / columns}%)`,
+    width: `${maxWidth}px`,
+    'max-width': '90%',
+    height: `${maxHeight}px`,
+    'max-height': '70vh',
+    'grid-template-columns': `20px repeat(${columns}, ${100 / (columns - 1)}%)`,
     'grid-template-rows': `repeat(${rows}, ${100 / rows}%)`,
-    margin: 'auto',
   };
   Object.keys(gridCss).forEach((style) => {
     grid.style[style] = gridCss[style];
   });
 
+  const columnLabels = [...Array(columns - 1).keys()].map((i) => i + 1);
+  const rowLabels = [...Array(rows - 1).keys()].map((i) => i + 1);
+  createLabels(columnLabels, grid, 'column');
+  createLabels(rowLabels, grid, 'row');
+
   data.forEach((episode) => {
+    if (!episode.season_number || !episode.episode_number) return;
     const episodeCell = document.createElement('div');
     episodeCell.className = 'episode-cell';
     episodeCell.setAttribute('data-tconst', episode.tconst);
+    episodeCell.setAttribute('data-title', episode.primary_title);
+    episodeCell.setAttribute('data-year', episode.start_year);
+    episodeCell.setAttribute('data-season', episode.season_number);
+    episodeCell.setAttribute('data-episode', episode.episode_number);
+    episodeCell.setAttribute('data-rating', episode.average_rating);
+    episodeCell.setAttribute('data-votes', episode.number_votes);
     const episodeDetail = createEpisodeDetail(episode);
     const tooltipPosition = episode.season_number / columns > 0.50 ? 'left' : 'right';
     episodeDetail.classList.add(`tooltip-${tooltipPosition}`);
     const rgb = getColor(episode.average_rating);
     const episodeCss = {
-      'grid-column': episode.season_number,
-      'grid-row': -episode.episode_number + rows + 1,
+      'grid-column': episode.season_number + 1,
+      'grid-row': -episode.episode_number + rows,
       'background-color': `rgb(${rgb.r},${rgb.g},${rgb.b})`,
     };
     Object.keys(episodeCss).forEach((style) => {
       episodeCell.style[style] = episodeCss[style];
     });
-    episodeCell.append(episodeDetail);
+    // episodeCell.append(episodeDetail);
     grid.append(episodeCell);
   });
 

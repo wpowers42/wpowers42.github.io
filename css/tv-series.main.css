@@ -59,20 +59,39 @@
     padding: 2%;
 }
 
+.heatmap-grid {
+    /* width: 90%; */
+    /* height: 70vh; */
+    display: grid;
+    margin: auto;
+}
+
+.label-row {
+    text-align: right;
+    margin: auto;
+    font-weight: bold;
+}
+
+.label-column {
+    text-align: center;
+    margin: auto;
+    font-weight: bold;
+}
+
 .episode-cell {
     position: relative;
     transition: transform .1s;
 }
 
-.episode-cell:active,
-.episode-cell:hover {
+.episode-cell:active, .episode-cell:hover {
     /* transform: scale(1.05); */
     z-index: 1;
     border: 2px black solid;
 }
 
 /* black background, white text? */
-.episode-detail {
+
+/* .episode-detail {
     display: none;
     position: absolute;
     top: 0;
@@ -81,9 +100,9 @@
     background-color: rgba(230, 230, 230, 0.80);
     z-index: 1;
     transform: translateX(50%);
-}
+} */
 
-.episode-detail.tooltip-left {
+/* .episode-detail.tooltip-left {
     right: 0;
     transform: translateX(-50%);
 }
@@ -91,10 +110,27 @@
 .episode-detail.tooltip-right {
     left: 0;
     transform: translateX(50%);
-}
+} */
 
-.episode-cell:active .episode-detail,
-.episode-cell:hover .episode-detail {
+/* .episode-cell:active .episode-detail, .episode-cell:hover .episode-detail {
     display: block;
     transform: scale(0.75);
+} */
+
+#episode-info {
+    display: none;
+    transform: translateX(-50%);
+    width: auto;
+    height: 50px;
+    pointer-events: none;
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+#episode-info.fixed-block {
+    display: block;
+    position: fixed;
+    overflow: hidden;
+    z-index: 1;
 }

@@ -1,4 +1,5 @@
 import { getEpisodes } from './tvSeries.grid';
+import { updateSuggestions } from './tvSeries.dom';
 
 export default class Suggestions {
   // pass in the search input box and suggestions div
@@ -65,28 +66,7 @@ export default class Suggestions {
 
   update() {
     this.selection = 0;
-    const results = this.fuzzyhound.search(this.input.value);
-    const frag = document.createDocumentFragment();
-    if (results.length) {
-      this.container.classList.add('active');
-    }
-    results.forEach((result) => {
-      const resultContainer = document.createElement('div');
-      resultContainer.className = 'result-container';
-      resultContainer.setAttribute('data-tconst', result.tconst);
-      resultContainer.setAttribute('data-title', result.title);
-      const titleContainer = document.createElement('div');
-      titleContainer.className = 'title-container';
-      titleContainer.innerHTML = this.fuzzyhound.highlight(result.title, 'title');
-      const yearsContainer = document.createElement('div');
-      yearsContainer.className = 'years-container';
-      yearsContainer.innerText = result.years;
-      resultContainer.append(titleContainer);
-      resultContainer.append(yearsContainer);
-      frag.appendChild(resultContainer);
-    });
-    this.container.innerHTML = '';
-    this.container.appendChild(frag);
+    updateSuggestions(this.container, this.fuzzyhound, this.input);
   }
 
   submit() {
