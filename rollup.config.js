@@ -22,4 +22,10 @@ export default [{
     file: 'js/tvSeries.main.js',
     format: 'cjs',
   },
+}, {
+  input: 'src/interval.main.js',
+  output: {
+    file: 'js/interval.main.js',
+    format: 'cjs',
+  },
 }];

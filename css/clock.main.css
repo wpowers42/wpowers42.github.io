@@ -46,7 +46,7 @@ html, body {
 }
 
 .pulsate {
-  animation: pulse 3s ease-out infinite;
+  animation: pulse .5s ease-out;
   opacity: 0.15;
   font-weight: 200;
 }

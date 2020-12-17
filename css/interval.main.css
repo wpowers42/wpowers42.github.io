@@ -1,0 +1,105 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body {
+  background-color: black;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 100;
+  color: white;
+}
+
+#interval-container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 100%;
+}
+
+.interval-subcontainer {
+  display: grid;
+  grid-template-rows: 80% 20%;
+  margin: auto;
+}
+
+#interval-primary,
+#interval-secondary {
+  font-size: 26vw;
+  line-height: 26vw;
+  text-align: center;
+  margin-top: auto;
+}
+
+.interval-label {
+  font-size: 5vw;
+  line-height: 5vw;
+  text-align: center;
+  margin-bottom: auto;
+}
+
+.inactive div {
+  opacity: 0.25;
+}
+
+/* reset */
+.buttons {
+  font-size: 2vw;
+  position: absolute;
+  display: grid;
+  grid-template-rows: 50% 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.25;
+  text-align: center;
+  height: 100%;
+}
+
+.buttons div {
+  cursor: pointer;
+}
+
+.start {
+  margin-top: auto;
+}
+
+.reset {
+  margin-bottom: auto;
+}
+
+/* selects */
+.selects {
+  font-size: 2vw;
+  position: absolute;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  left: 50%;
+  bottom: 5%;
+  transform: translateX(-50%);
+  opacity: 0.25;
+  text-align: center;
+}
+
+.selects select {
+  margin: 0% 5px;
+  padding: 5px 10px;
+  text-align: center;
+}
+
+select {
+  font-size: 2vw;
+  text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+}
+
+select option {
+  text-align: center;
+  margin: auto;
+}
