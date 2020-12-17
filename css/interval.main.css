@@ -80,7 +80,7 @@ html, body {
   left: 50%;
   bottom: 5%;
   transform: translateX(-50%);
-  opacity: 0.25;
+  opacity: 0.50;
   text-align: center;
 }
 
@@ -91,13 +91,18 @@ html, body {
 }
 
 select {
-  font-size: 2vw;
-  text-align: center;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  border: none;
+  font-size: 2vw;
+  text-align: center;
+  color: white;
+  background-color: black;
+  border: 2px white solid;
+  border-radius: 10%;
+  cursor: pointer;
 }
+
 
 select option {
   text-align: center;
