@@ -42,6 +42,7 @@ class Interval {
   }
 
   start() {
+    this.audio.play(); // play sound indicating period has ended
     clearInterval(this.interval);
     this.setEndTime(this.isPrimary ? this.primary : this.secondary);
     this.target = this.isPrimary ? this.primaryElement : this.secondaryElement;
@@ -49,7 +50,6 @@ class Interval {
       const ms = this.end.getTime() - new Date().getTime();
       this.target.textContent = Math.ceil(ms / 1000);
       if (ms <= 0) {
-        this.audio.play(); // play sound indicating period has ended
         const value = this.isPrimary ? this.primary : this.secondary;
         this.isPrimary = !this.isPrimary;
         this.setActive();
