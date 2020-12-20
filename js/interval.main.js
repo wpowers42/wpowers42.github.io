@@ -1,6 +1,6 @@
 'use strict';
 
-const noSleep = new NoSleep();
+let noSleep = null;
 
 class Interval {
   constructor(primary, secondary, primaryElement, secondaryElement) {
@@ -20,6 +20,7 @@ class Interval {
     document.querySelector('.start').addEventListener('click', this.start.bind(this));
     document.querySelector('.start').addEventListener('click', function enableNoSleep() {
       document.removeEventListener('click', enableNoSleep, false);
+      noSleep = new noSleep();
       noSleep.enable();
     }, false);
     document.querySelector('.reset').addEventListener('click', this.reset.bind(this));
