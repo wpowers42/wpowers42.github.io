@@ -16,6 +16,7 @@ class Interval {
     this.end = null;
     this.interval = null;
     this.target = null;
+    this.audio = document.querySelector('.audio');
     this.createEventListeners();
   }
 
@@ -48,6 +49,7 @@ class Interval {
       const ms = this.end.getTime() - new Date().getTime();
       this.target.textContent = Math.ceil(ms / 1000);
       if (ms <= 0) {
+        this.audio.play(); // play sound indicating period has ended
         const value = this.isPrimary ? this.primary : this.secondary;
         this.isPrimary = !this.isPrimary;
         this.setActive();
