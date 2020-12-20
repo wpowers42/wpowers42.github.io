@@ -1,10 +1,6 @@
 'use strict';
 
-// 2 inputs > main time and off time
-// start button
-// v1 refresh to reset
-// start > countdown of 1, when at end start counddown of 2
-// repeat
+const noSleep = new NoSleep();
 
 class Interval {
   constructor(primary, secondary, primaryElement, secondaryElement) {
@@ -22,6 +18,10 @@ class Interval {
 
   createEventListeners() {
     document.querySelector('.start').addEventListener('click', this.start.bind(this));
+    document.querySelector('.start').addEventListener('click', function enableNoSleep() {
+      document.removeEventListener('click', enableNoSleep, false);
+      noSleep.enable();
+    }, false);
     document.querySelector('.reset').addEventListener('click', this.reset.bind(this));
     document.querySelector('.select-primary').addEventListener('change', (event) => {
       this.updatePrimary.bind(this)(parseInt(event.target.value, 10));
