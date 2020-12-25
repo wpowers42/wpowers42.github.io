@@ -31,7 +31,9 @@ const comparePatterns = (numpad, entry) => {
 };
 
 // eslint-disable-next-line no-alert
-const code = prompt('Create a passcode:');
+const urlParams = new URLSearchParams(window.location.search);
+const code = parseInt(urlParams.get('c'), 36);
+// 1112745 default
 const numpad = createNumpad(code);
 
 document.querySelector('.numpad').addEventListener('click', (event) => {
