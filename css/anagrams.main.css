@@ -1,0 +1,100 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body {
+  background-position: 30% 0%;
+  background-size: cover;
+}
+
+.board {
+  max-width: 300px;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.board.blur {
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.anagram-container {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: auto;
+  /* margin-top: 10px; */
+  height: 40px;
+  align-content: center;
+}
+
+.anagram {
+  width: 150px;
+}
+
+.anagram-input {
+  width: 150px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.anagram-solution {
+  display: flex;
+  width: 300px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  justify-content: center;
+}
+
+.anagram-solution-highlight {
+  color: red;
+}
+
+.hidden {
+  display: none;
+}
+
+.revealed {
+  display: block;
+}
+
+.solution-container {
+  max-width: 375px;
+  height: 50px;
+  margin: auto;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.solution {
+  display: flex;
+}
+
+.solution-message {
+  visibility: hidden;
+  color: white;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.solution-letter {
+  width: 23px;
+  height: 23px;
+  font-size: 23px;
+  line-height: 23px;;
+  text-transform: uppercase;
+  text-align: center;
+  margin-left: 1px;
+  border-radius: 1px;
+}

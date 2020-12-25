@@ -28,4 +28,16 @@ export default [{
     file: 'js/interval.main.js',
     format: 'cjs',
   },
+}, {
+  input: 'src/secret.main.js',
+  output: {
+    file: 'js/secret.main.js',
+    format: 'cjs',
+  },
+}, {
+  input: 'src/anagrams.main.js',
+  output: {
+    file: 'js/anagrams.main.js',
+    format: 'cjs',
+  },
 }];
