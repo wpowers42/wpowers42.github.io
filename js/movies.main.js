@@ -1,32 +1,40 @@
 'use strict';
 
-const clearResults = () => {
-  const searchResults = document.querySelector('.search-results');
+var clearResults = function clearResults() {
+  var searchResults = document.querySelector('.search-results');
   searchResults.innerHTML = '';
-  const noResults = document.querySelectorAll('.movie-no-results');
-  Array.from(noResults).forEach((div) => div.remove());
+  var noResults = document.querySelectorAll('.movie-no-results');
+  Array.from(noResults).forEach(function (div) {
+    return div.remove();
+  });
 };
 
-const createResults = (data) => {
-  const frag = document.createDocumentFragment();
-  const sort = (a, b) => {
+var createResults = function createResults(data) {
+  var frag = document.createDocumentFragment();
+
+  var sort = function sort(a, b) {
     if (a.votes === b.votes) {
       return b.word.length - a.word.length;
     }
+
     return b.votes - a.votes;
   };
-  const titles = [];
-  const filter = (a) => {
+
+  var titles = [];
+
+  var filter = function filter(a) {
     if (!titles.includes(a.title)) {
       titles.push(a.title);
       return true;
     }
+
     return false;
   };
-  data.sort(sort).filter(filter).forEach((movie) => {
-    const movieContainer = document.createElement('div');
+
+  data.sort(sort).filter(filter).forEach(function (movie) {
+    var movieContainer = document.createElement('div');
     movieContainer.className = 'movie-container';
-    const editedTitle = document.createElement('div');
+    var editedTitle = document.createElement('div');
     editedTitle.className = 'movie-edited-title';
     editedTitle.textContent = movie.edited_title;
     movieContainer.append(editedTitle);
@@ -35,22 +43,22 @@ const createResults = (data) => {
   return frag;
 };
 
-const displayResults = (frag) => {
-  const searchResults = document.querySelector('.search-results');
+var displayResults = function displayResults(frag) {
+  var searchResults = document.querySelector('.search-results');
   searchResults.appendChild(frag.cloneNode(true));
 };
 
-const displayNoResults = () => {
-  const body = document.querySelector('body');
-  const noResults = document.createElement('div');
+var displayNoResults = function displayNoResults() {
+  var body = document.querySelector('body');
+  var noResults = document.createElement('div');
   noResults.className = 'movie-no-results';
   noResults.textContent = 'No Results :(';
   body.append(noResults);
 };
 
-const createEventListeners = () => {
-  const searchResults = document.querySelector('.search-results');
-  searchResults.addEventListener('click', (event) => {
+var createEventListeners = function createEventListeners() {
+  var searchResults = document.querySelector('.search-results');
+  searchResults.addEventListener('click', function (event) {
     if (event.target.className === 'movie-container') {
       event.target.classList.toggle('favorite');
     } else if (event.target.className === 'movie-edited-title') {
@@ -59,32 +67,32 @@ const createEventListeners = () => {
   });
 };
 
-var getRhymes = (query) => {
-  const url = `https://willp.herokuapp.com/puns/${query}`;
+var getRhymes = (function (query) {
+  var url = "https://willp.herokuapp.com/puns/".concat(query);
+  fetch(url).then(function (res) {
+    return res.json();
+  }).then(function (data) {
+    createEventListeners();
+    clearResults();
 
-  fetch(url)
-    .then((res) => res.json())
-    .then((data) => {
-      createEventListeners();
-      clearResults();
-      if (!data.length) {
-        displayNoResults();
-      } else {
-        const results = createResults(data);
-        displayResults(results);
-      }
-    });
-};
+    if (!data.length) {
+      displayNoResults();
+    } else {
+      var results = createResults(data);
+      displayResults(results);
+    }
+  });
+});
 
 (function main() {
-  const searchBox = document.querySelector('.search-box');
-  searchBox.addEventListener('keyup', (event) => {
+  var searchBox = document.querySelector('.search-box');
+  searchBox.addEventListener('keyup', function (event) {
     if (event.keyCode === 13) {
       // Cancel the default action, if needed
-      event.preventDefault();
-      // Trigger the button element with a click
-      const query = event.target.value.toLowerCase();
+      event.preventDefault(); // Trigger the button element with a click
+
+      var query = event.target.value.toLowerCase();
       getRhymes(query);
     }
   });
-}());
+})();
