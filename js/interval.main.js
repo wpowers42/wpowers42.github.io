@@ -158,7 +158,7 @@ var Interval = /*#__PURE__*/function () {
 }(); // eslint-disable-next-line no-unused-vars
 
 
-var i = new Interval(888, 30, document.querySelector('.time'));
+new Interval(888, 30, document.querySelector('.time'));
 
 var resizeTime = function resizeTime() {
   var gridDiv = document.querySelector('.grid-container');

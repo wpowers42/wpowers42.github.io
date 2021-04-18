@@ -152,7 +152,7 @@ var getColor = function getColor(rating) {
   return color;
 };
 
-var createEpisodeDetail = function createEpisodeDetail(episode) {
+var createEpisodeDetail$1 = function createEpisodeDetail(episode) {
   // container
   var episodeDetail = document.createElement('div');
   episodeDetail.className = 'episode-detail'; // Season and Episode
@@ -237,7 +237,7 @@ var createGrid = function createGrid(data) {
     episodeCell.setAttribute('data-episode', episode.episode_number);
     episodeCell.setAttribute('data-rating', episode.average_rating);
     episodeCell.setAttribute('data-votes', episode.number_votes);
-    var episodeDetail = createEpisodeDetail(episode);
+    var episodeDetail = createEpisodeDetail$1(episode);
     var tooltipPosition = episode.season_number / columns > 0.50 ? 'left' : 'right';
     episodeDetail.classList.add("tooltip-".concat(tooltipPosition));
     var rgb = getColor(episode.average_rating);
@@ -396,7 +396,7 @@ var Suggestions = /*#__PURE__*/function () {
   return Suggestions;
 }();
 
-var createEpisodeDetail$1 = function createEpisodeDetail(dataset) {
+var createEpisodeDetail = function createEpisodeDetail(dataset) {
   // container
   var episodeDetail = document.createElement('div');
   episodeDetail.className = 'episode-detail'; // Season and Episode
@@ -509,7 +509,7 @@ var registerHoverGrid = function registerHoverGrid() {
     if (!event.target.classList.contains('episode-cell')) return;
     var w = event.target.offsetWidth;
     var l = event.target.offsetLeft;
-    var h = event.target.offsetHeight;
+    event.target.offsetHeight;
     var t = event.target.offsetTop;
     var x = l + w / 2;
     var y = t - episodeInfo.offsetHeight;
@@ -517,7 +517,7 @@ var registerHoverGrid = function registerHoverGrid() {
     episodeInfo.style.top = "".concat(y, "px");
     episodeInfo.style.left = "".concat(x, "px");
     episodeInfo.innerHTML = '';
-    episodeInfo.append(createEpisodeDetail$1(event.target.dataset)); // episodeInfo.textContent = event.target.getAttribute('data-title');
+    episodeInfo.append(createEpisodeDetail(event.target.dataset)); // episodeInfo.textContent = event.target.getAttribute('data-title');
   }); // the xy coordinates reset to some position when non-mouseover, seems ok
 
   gridContainer.addEventListener('mouseleave', function () {
