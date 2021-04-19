@@ -2,6 +2,22 @@
   padding: 5%;
 }
 
+.day-of-month {
+  position: absolute;
+  right: 1px;
+  top: 0px;
+  font-size: 0.5rem;
+}
+
+.sign {
+  font-size: 0.5rem;
+  font-weight: 800;
+}
+
+.due-date {
+  font-size: 0.5rem;
+}
+
 @keyframes swoosh-up {
   0% {
       opacity: 1;
@@ -104,7 +120,7 @@
 #calendar #calendar-grid > time {
   display: grid;
   grid-template-rows: auto auto;
-  font-size: 0.7rem;
+  position: relative;
 
   /* display: flex; */
   text-align: center;
@@ -114,7 +130,7 @@
   margin: 0.4em;
   padding: 1em 0.2em;
   width: 90%;
-  background-color: rgba(108, 108, 108, 0.02);
+  /* background-color: rgba(108, 108, 108, 0.02); */
   border-radius: 3px;
   border: 2px solid transparent;
   transition: box-shadow 200ms, border 100ms;

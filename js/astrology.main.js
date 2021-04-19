@@ -24,6 +24,53 @@ var getSign = function getSign(dt) {
   return getZodiacSign(dt.date(), dt.month() + 1);
 };
 
+var getSignColor = function getSignColor(sign) {
+  var color1 = 'rgba(195, 169, 255, 0.50)';
+  var color2 = 'rgba(133, 208, 175, 0.50)';
+  var color3 = 'rgba(85, 189, 202, 0.50)';
+
+  switch (sign) {
+    case 'Aries':
+      return color1;
+
+    case 'Taurus':
+      return color2;
+
+    case 'Gemini':
+      return color3;
+
+    case 'Cancer':
+      return color1;
+
+    case 'Leo':
+      return color2;
+
+    case 'Virgo':
+      return color3;
+
+    case 'Libra':
+      return color1;
+
+    case 'Scorpio':
+      return color2;
+
+    case 'Sagittarius':
+      return color3;
+
+    case 'Capricorn':
+      return color1;
+
+    case 'Aquarius':
+      return color2;
+
+    case 'Pisces':
+      return color3;
+
+    default:
+      return color1;
+  }
+};
+
 var getDaysArrayByMonth = function getDaysArrayByMonth(date) {
   var daysInMonth = moment(date).daysInMonth();
   var arrDays = [];
@@ -48,13 +95,12 @@ var dates = function dates() {
   var enhancedDays = arrDays.map(function (day) {
     return {
       day: day.format('YYYY-MM-DD'),
-      sign: getSign(day.add(266, 'days'))
+      sign: getSign(day.add(266, 'days')),
+      dueDate: day.add(266, 'days').format('YYYY-MM-DD')
     };
   });
   return enhancedDays;
-}; // TODO: add 266 days
-// TODO: fix disabled
-
+};
 
 var update = function update() {
   var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : moment();
@@ -68,18 +114,27 @@ var update = function update() {
   }
 
   var calendarWrapper = document.querySelector('#calendar-grid');
-  calendarWrapper.innerHTML = '';
+  calendarWrapper.innerHTML = ''; // const firstSign = days.filter((day) => day)[0].sign;
+
   days.forEach(function (day) {
     var container = document.createElement(day ? 'time' : 'span');
     var number = document.createElement('div');
-    var sign = document.createElement('div');
     number.textContent = day ? moment(day.day).date() : '';
+    number.className = 'day-of-month';
+    var sign = document.createElement('div');
     sign.textContent = day ? day.sign : '';
+    sign.className = 'sign';
+    var dueDate = document.createElement('div');
+    dueDate.textContent = day ? day.dueDate : '';
+    dueDate.className = 'due-date';
     container.appendChild(number);
     container.appendChild(sign);
+    container.appendChild(dueDate);
 
     if (day && moment(day.day).isBefore(moment(), 'day')) {
-      container.className = 'disabled';
+      container.classList.add('disabled');
+    } else if (day) {
+      container.style.backgroundColor = getSignColor(day.sign);
     }
 
     calendarWrapper.appendChild(container);
