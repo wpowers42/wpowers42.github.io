@@ -7,6 +7,7 @@
   <link rel="shortcut icon" type="image/x-icon" href="images/ic_pie_chart_48px.svg" />
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/navigation.home.main.css">
+  <link rel="stylesheet" href="css/astrology.main.css">
   <title>Clock</title>
 </head>
 
@@ -17,16 +18,35 @@
       <img class="arrow-back" src="images/ic_arrow_back_48px.svg" />
     </a>
   </div>
-  <div id="astrology">
-    <label for="start">Start Date:</label>
-    <input type="date" id="start" name="start" value=>
-    <script>
-      document.querySelector('#start').valueAsDate = new Date();
-    </script>
-    <label for="days">Number of days (10-100):</label>
-    <input type="number" id="days" name="days" value=30 min="10" max="100">
-    <button type="button" id="button">Update</button> 
-    <div id="table"></div>
+  <div id="page-content">
+    <div id="calendar-wrapper">
+      <header>
+        <h4 id="month"></h4>
+      </header>
+      <div id="calendar">
+        <section id="calendar-days">
+          <span>Sunday</span>
+          <span>Monday</span>
+          <span>Tuesday</span>
+          <span>Wednesday</span>
+          <span>Thursday</span>
+          <span>Friday</span>
+          <span>Saturday</span>
+        </section>
+        <section id="navigation-wrapper">
+          <button id="previous-month" aria-label="Go to previous month">
+            <svg enable-background="new 0 0 386.257 386.257" viewBox="0 0 386.257 386.257"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="m0 96.879 193.129 192.5 193.128-192.5z"></path>
+            </svg></button><button id="next-month" aria-label="Go to next month"><svg
+              enable-background="new 0 0 386.257 386.257" viewBox="0 0 386.257 386.257"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="m0 96.879 193.129 192.5 193.128-192.5z"></path>
+            </svg></button>
+        </section>
+        <section id="calendar-grid">
+      </div>
+    </div>
   </div>
   <script src="js/lib/moment.min.js" type="text/javascript"></script>
   <script src="js/astrology.main.js" type="text/javascript"></script>

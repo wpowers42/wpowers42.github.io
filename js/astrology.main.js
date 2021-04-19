@@ -1,6 +1,9 @@
 'use strict';
 
-// https://www.codewars.com/kata/5a376259b6cfd77ca000006b/solutions/javascript
+/* eslint-disable no-undef */
+console.log('Credit for zodiac sign: https://www.codewars.com/kata/5a376259b6cfd77ca000006b/solutions/javascript');
+console.log('Credit for calendar CSS: https://mathiaspicker.com/CalendarPickerJS/');
+
 var getZodiacSign = function getZodiacSign(day, month) {
   if (month === 1) return day < 20 ? 'Capricorn' : 'Aquarius';
   if (month === 2) return day < 19 ? 'Aquarius' : 'Pisces';
@@ -21,57 +24,73 @@ var getSign = function getSign(dt) {
   return getZodiacSign(dt.date(), dt.month() + 1);
 };
 
+var getDaysArrayByMonth = function getDaysArrayByMonth(date) {
+  var daysInMonth = moment(date).daysInMonth();
+  var arrDays = [];
+
+  while (daysInMonth) {
+    var _current = moment(date).date(daysInMonth);
+
+    arrDays.push(_current); // eslint-disable-next-line no-plusplus
+
+    daysInMonth--;
+  }
+
+  arrDays.sort(function (a, b) {
+    return a.date() - b.date();
+  });
+  return arrDays;
+};
+
 var dates = function dates() {
-  var userStart = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  var days = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 60;
-  var dateArray = [];
-  var today = userStart ? moment(userStart) : moment();
-  var i = 0;
-
-  do {
-    var start = today.clone().add(i, 'days');
-    var stop = start.clone().add(266, 'days');
-    var obj = {
-      start: start.format('YYYY-MM-DD'),
-      stop: stop.format('YYYY-MM-DD'),
-      sign: getSign(stop)
+  var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : moment();
+  var arrDays = getDaysArrayByMonth(date);
+  var enhancedDays = arrDays.map(function (day) {
+    return {
+      day: day.format('YYYY-MM-DD'),
+      sign: getSign(day)
     };
-    dateArray.push(obj);
-    i += 1;
-  } while (i < days);
-
-  return dateArray;
+  });
+  return enhancedDays;
 };
 
-var formatTable = function formatTable(data) {
-  var table = document.createElement('table');
-  var i = 0;
+var update = function update() {
+  var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : moment();
+  document.querySelector('#month').innerText = date.format('MMMM - YYYY');
+  var days = dates(date);
+  var padding = moment(days[0].day).day();
 
-  do {
-    var date = data[i];
-    var row = document.createElement('tr');
-    var start = document.createElement('td');
-    start.innerText = date.start;
-    row.appendChild(start);
-    var stop = document.createElement('td');
-    stop.innerText = date.stop;
-    row.appendChild(stop);
-    var sign = document.createElement('td');
-    sign.innerText = date.sign;
-    row.appendChild(sign);
-    table.appendChild(row);
-    i += 1;
-  } while (i < data.length);
+  while (padding > 0) {
+    days.unshift(null);
+    padding--;
+  }
 
-  document.querySelector('#table').innerHTML = '';
-  document.querySelector('#table').appendChild(table);
+  var calendarWrapper = document.querySelector('#calendar-grid');
+  calendarWrapper.innerHTML = '';
+  days.forEach(function (day) {
+    var container = document.createElement(day ? 'time' : 'span');
+    var number = document.createElement('div');
+    var sign = document.createElement('div');
+    number.textContent = day ? moment(day.day).date() : '';
+    sign.textContent = day ? day.sign : '';
+    container.appendChild(number);
+    container.appendChild(sign);
+
+    if (day && moment().dayOfYear() > moment(day.day).dayOfYear()) {
+      container.className = 'disabled';
+    }
+
+    calendarWrapper.appendChild(container);
+  });
 };
 
-var updateTable = function updateTable() {
-  var date = document.querySelector('#start').value;
-  var days = document.querySelector('#days').value;
-  formatTable(dates(date, days));
-};
-
-document.querySelector('#button').addEventListener('click', updateTable);
-updateTable();
+var current = moment();
+update(current);
+document.querySelector('#previous-month').addEventListener('click', function () {
+  current = current.subtract(1, 'month');
+  update(current);
+});
+document.querySelector('#next-month').addEventListener('click', function () {
+  current = current.add(1, 'month');
+  update(current);
+});

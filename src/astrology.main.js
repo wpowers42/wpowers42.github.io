@@ -1,4 +1,8 @@
-// https://www.codewars.com/kata/5a376259b6cfd77ca000006b/solutions/javascript
+/* eslint-disable no-undef */
+
+console.log('Credit for zodiac sign: https://www.codewars.com/kata/5a376259b6cfd77ca000006b/solutions/javascript');
+console.log('Credit for calendar CSS: https://mathiaspicker.com/CalendarPickerJS/');
+
 const getZodiacSign = (day, month) => {
   if (month === 1) return day < 20 ? 'Capricorn' : 'Aquarius';
   if (month === 2) return day < 19 ? 'Aquarius' : 'Pisces';
@@ -17,55 +21,67 @@ const getZodiacSign = (day, month) => {
 
 const getSign = (dt) => getZodiacSign(dt.date(), dt.month() + 1);
 
-const dates = (userStart = null, days = 60) => {
-  const dateArray = [];
-  const today = userStart ? moment(userStart) : moment();
-  let i = 0;
-  do {
-    const start = today.clone().add(i, 'days');
-    const stop = start.clone().add(266, 'days');
-    const obj = {
-      start: start.format('YYYY-MM-DD'),
-      stop: stop.format('YYYY-MM-DD'),
-      sign: getSign(stop),
-    };
-    dateArray.push(obj);
-    i += 1;
-  } while (i < days);
-  return dateArray;
+const getDaysArrayByMonth = (date) => {
+  let daysInMonth = moment(date).daysInMonth();
+  const arrDays = [];
+
+  while (daysInMonth) {
+    const current = moment(date).date(daysInMonth);
+    arrDays.push(current);
+    // eslint-disable-next-line no-plusplus
+    daysInMonth--;
+  }
+
+  arrDays.sort((a, b) => a.date() - b.date());
+
+  return arrDays;
 };
 
-const formatTable = (data) => {
-  const table = document.createElement('table');
-  let i = 0;
-  do {
-    const date = data[i];
-    const row = document.createElement('tr');
-    const start = document.createElement('td');
-    start.innerText = date.start;
-    row.appendChild(start);
+const dates = (date = moment()) => {
+  const arrDays = getDaysArrayByMonth(date);
 
-    const stop = document.createElement('td');
-    stop.innerText = date.stop;
-    row.appendChild(stop);
-
-    const sign = document.createElement('td');
-    sign.innerText = date.sign;
-    row.appendChild(sign);
-
-    table.appendChild(row);
-    i += 1;
-  } while (i < data.length);
-  document.querySelector('#table').innerHTML = '';
-  document.querySelector('#table').appendChild(table);
+  const enhancedDays = arrDays.map((day) => ({
+    day: day.format('YYYY-MM-DD'),
+    sign: getSign(day),
+  }));
+  return enhancedDays;
 };
 
-const updateTable = () => {
-  const date = document.querySelector('#start').value;
-  const days = document.querySelector('#days').value;
-  formatTable(dates(date, days));
+const update = (date = moment()) => {
+  document.querySelector('#month').innerText = date.format('MMMM - YYYY');
+  const days = dates(date);
+  let padding = moment(days[0].day).day();
+  while (padding > 0) {
+    days.unshift(null);
+    padding--;
+  }
+
+  const calendarWrapper = document.querySelector('#calendar-grid');
+  calendarWrapper.innerHTML = '';
+  days.forEach((day) => {
+    const container = document.createElement(day ? 'time' : 'span');
+    const number = document.createElement('div');
+    const sign = document.createElement('div');
+    number.textContent = day ? moment(day.day).date() : '';
+    sign.textContent = day ? day.sign : '';
+    container.appendChild(number);
+    container.appendChild(sign);
+    if (day && moment().dayOfYear() > moment(day.day).dayOfYear()) {
+      container.className = 'disabled';
+    }
+    calendarWrapper.appendChild(container);
+  });
 };
 
-document.querySelector('#button').addEventListener('click', updateTable);
+let current = moment();
+update(current);
 
-updateTable();
+document.querySelector('#previous-month').addEventListener('click', () => {
+  current = current.subtract(1, 'month');
+  update(current);
+});
+
+document.querySelector('#next-month').addEventListener('click', () => {
+  current = current.add(1, 'month');
+  update(current);
+});
