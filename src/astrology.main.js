@@ -42,10 +42,13 @@ const dates = (date = moment()) => {
 
   const enhancedDays = arrDays.map((day) => ({
     day: day.format('YYYY-MM-DD'),
-    sign: getSign(day),
+    sign: getSign(day.add(266, 'days')),
   }));
   return enhancedDays;
 };
+
+// TODO: add 266 days
+// TODO: fix disabled
 
 const update = (date = moment()) => {
   document.querySelector('#month').innerText = date.format('MMMM - YYYY');
@@ -66,7 +69,7 @@ const update = (date = moment()) => {
     sign.textContent = day ? day.sign : '';
     container.appendChild(number);
     container.appendChild(sign);
-    if (day && moment().dayOfYear() > moment(day.day).dayOfYear()) {
+    if (day && moment(day.day).isBefore(moment(), 'day')) {
       container.className = 'disabled';
     }
     calendarWrapper.appendChild(container);

@@ -48,11 +48,13 @@ var dates = function dates() {
   var enhancedDays = arrDays.map(function (day) {
     return {
       day: day.format('YYYY-MM-DD'),
-      sign: getSign(day)
+      sign: getSign(day.add(266, 'days'))
     };
   });
   return enhancedDays;
-};
+}; // TODO: add 266 days
+// TODO: fix disabled
+
 
 var update = function update() {
   var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : moment();
@@ -76,7 +78,7 @@ var update = function update() {
     container.appendChild(number);
     container.appendChild(sign);
 
-    if (day && moment().dayOfYear() > moment(day.day).dayOfYear()) {
+    if (day && moment(day.day).isBefore(moment(), 'day')) {
       container.className = 'disabled';
     }
 
