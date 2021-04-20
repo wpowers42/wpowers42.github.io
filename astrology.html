@@ -12,37 +12,40 @@
 </head>
 
 <body>
-
+<!-- 
   <div class="navigation-home-container">
     <a href="index.html" class='link-home'>
       <img class="arrow-back" src="images/ic_arrow_back_48px.svg" />
     </a>
-  </div>
+  </div> -->
   <div id="page-content">
     <div id="calendar-wrapper">
-      <header>
-        <h4 id="month"></h4>
-      </header>
+      
       <div id="calendar">
-        <section id="calendar-days">
-          <span>Sunday</span>
-          <span>Monday</span>
-          <span>Tuesday</span>
-          <span>Wednesday</span>
-          <span>Thursday</span>
-          <span>Friday</span>
-          <span>Saturday</span>
-        </section>
         <section id="navigation-wrapper">
+          <!-- <button id="previous-month" aria-label="Go to previous month">Previous Month</button> -->
           <button id="previous-month" aria-label="Go to previous month">
-            <svg enable-background="new 0 0 386.257 386.257" viewBox="0 0 386.257 386.257"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="m0 96.879 193.129 192.5 193.128-192.5z"></path>
-            </svg></button><button id="next-month" aria-label="Go to next month"><svg
-              enable-background="new 0 0 386.257 386.257" viewBox="0 0 386.257 386.257"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="m0 96.879 193.129 192.5 193.128-192.5z"></path>
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <path fill="none" d="M0 0h48v48H0Z" />
+              <path d="M40 22H15.66l11.17-11.17L24 8 8 24l16 16 2.83-2.83L15.66 26H40v-4Z" />
             </svg></button>
+            <header>
+              <h4 id="month"></h4>
+            </header>
+            <button id="next-month" aria-label="Go to next month"><svg viewBox="0 0 48 48"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill="none" d="M0 0h48v48H0Z" />
+              <path d="M24 8l-2.83 2.83L32.34 22H8v4h24.34L21.17 37.17 24 40l16-16Z" />
+            </svg></button>
+        </section>
+        <section id="calendar-days">
+          <span>Sun</span>
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
         </section>
         <section id="calendar-grid">
       </div>

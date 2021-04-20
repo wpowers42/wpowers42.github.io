@@ -65,7 +65,7 @@ const dates = (date = moment()) => {
   const enhancedDays = arrDays.map((day) => ({
     day: day.format('YYYY-MM-DD'),
     sign: getSign(day.add(266, 'days')),
-    dueDate: day.add(266, 'days').format('YYYY-MM-DD'),
+    dueDate: day.add(266, 'days').format('MM/DD/YY'),
   }));
   return enhancedDays;
 };
