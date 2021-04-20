@@ -1,9 +1,6 @@
+html,
 body {
   touch-action: manipulation;
-}
-
-header {
-  touch-action: none;
 }
 
 #calendar-wrapper {
