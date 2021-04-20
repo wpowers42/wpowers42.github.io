@@ -126,3 +126,6 @@ document.querySelector('#next-month').addEventListener('click', () => {
   current = current.clone().add(1, 'month');
   update(current);
 });
+
+const width = (window.innerWidth > 0) ? window.innerWidth : document.screen.width;
+document.querySelector('#device-width').textContent = width;
