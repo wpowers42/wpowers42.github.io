@@ -4,17 +4,19 @@
   padding: 5%;
 }
 
-@media screen and (max-width: 375px) {
+time {
+  font-size: 10px;
+}
+
+@media screen and (max-width: 414px) {
   #calendar-wrapper {
     padding: 1%;
   }
 
-  body {
-    font-size: 0.45rem;
+  time {
+    font-size: 7px;
   }
-  /* .Sagittarius {
-    font-size: 0.38rem;
-  } */
+  
 }
 
 #navigation-wrapper {
