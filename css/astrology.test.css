@@ -1,3 +1,7 @@
+body{
+  touch-action: manipulation;
+}
+
 #calendar-wrapper {
   margin: auto;
   max-width: 700px;
@@ -30,7 +34,6 @@ time {
   opacity: 1.0;
   background-color: white;
   border: none;
-  touch-action: none;
 }
 
 h4 {
