@@ -7,48 +7,42 @@
   <link rel="shortcut icon" type="image/x-icon" href="images/ic_pie_chart_48px.svg" />
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/navigation.home.main.css">
-  <link rel="stylesheet" href="css/astrology.main.css">
+  <!-- <link rel="stylesheet" href="css/astrology.main.css"> -->
+  <link rel="stylesheet" href="css/astrology.test.css">
   <title>Astrology</title>
 </head>
 
 <body>
-<!-- 
+  <!-- 
   <div class="navigation-home-container">
     <a href="index.html" class='link-home'>
       <img class="arrow-back" src="images/ic_arrow_back_48px.svg" />
     </a>
   </div> -->
-  <div id="page-content">
-    <div id="calendar-wrapper">
-      
-      <div id="calendar">
-        <section id="navigation-wrapper">
-          <!-- <button id="previous-month" aria-label="Go to previous month">Previous Month</button> -->
-          <button id="previous-month" aria-label="Go to previous month">
-            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-              <path fill="none" d="M0 0h48v48H0Z" />
-              <path d="M40 22H15.66l11.17-11.17L24 8 8 24l16 16 2.83-2.83L15.66 26H40v-4Z" />
-            </svg></button>
-            <header>
-              <h4 id="month"></h4>
-            </header>
-            <button id="next-month" aria-label="Go to next month"><svg viewBox="0 0 48 48"
-              xmlns="http://www.w3.org/2000/svg">
-              <path fill="none" d="M0 0h48v48H0Z" />
-              <path d="M24 8l-2.83 2.83L32.34 22H8v4h24.34L21.17 37.17 24 40l16-16Z" />
-            </svg></button>
-        </section>
-        <section id="calendar-days">
-          <span>Sun</span>
-          <span>Mon</span>
-          <span>Tue</span>
-          <span>Wed</span>
-          <span>Thu</span>
-          <span>Fri</span>
-          <span>Sat</span>
-        </section>
-        <section id="calendar-grid">
-      </div>
+  <div id="calendar-wrapper">
+    <div id="calendar">
+      <section id="navigation-wrapper">
+        <!-- <button id="previous-month" aria-label="Go to previous month">Previous Month</button> -->
+        <button id="previous-month" aria-label="Go to previous month">
+          <img class="arrow-back" src="images/ic_navigate_before_48px.svg" />
+        </button>
+        <header>
+          <h4 id="month"></h4>
+        </header>
+        <button id="next-month" aria-label="Go to next month">
+          <img class="arrow-back" src="images/ic_navigate_next_48px.svg" />
+        </button>
+      </section>
+      <section id="calendar-days">
+        <span>Sun</span>
+        <span>Mon</span>
+        <span>Tue</span>
+        <span>Wed</span>
+        <span>Thu</span>
+        <span>Fri</span>
+        <span>Sat</span>
+      </section>
+      <section id="calendar-grid"></section>
     </div>
   </div>
   <script src="js/lib/moment.min.js" type="text/javascript"></script>
