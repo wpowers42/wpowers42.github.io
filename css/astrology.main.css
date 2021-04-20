@@ -15,7 +15,7 @@ body {
 }
 
 #page-content {
-  padding: 2%;
+  padding: 20px 0%;
 }
 
 .day-of-month {
@@ -119,7 +119,7 @@ body {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   align-items: center;
-  padding: 0 1em;
+  /* padding: 0 1em; */
   box-sizing: inherit;
   margin: 0;
 }
