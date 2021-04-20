@@ -94,9 +94,9 @@ var dates = function dates() {
   var arrDays = getDaysArrayByMonth(date);
   var enhancedDays = arrDays.map(function (day) {
     return {
-      day: day.format('YYYY-MM-DD'),
-      sign: getSign(day.add(266, 'days')),
-      dueDate: day.add(266, 'days').format('MM/DD/YY')
+      day: day.clone().format('YYYY-MM-DD'),
+      sign: getSign(day.clone().add(266, 'days')),
+      dueDate: day.clone().add(266, 'days').format('MM/DD/YY')
     };
   });
   return enhancedDays;
@@ -148,6 +148,6 @@ document.querySelector('#previous-month').addEventListener('click', function () 
   update(current);
 });
 document.querySelector('#next-month').addEventListener('click', function () {
-  current = current.add(1, 'month');
+  current = current.clone().add(1, 'month');
   update(current);
 });

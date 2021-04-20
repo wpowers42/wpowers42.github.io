@@ -63,9 +63,9 @@ const dates = (date = moment()) => {
   const arrDays = getDaysArrayByMonth(date);
 
   const enhancedDays = arrDays.map((day) => ({
-    day: day.format('YYYY-MM-DD'),
-    sign: getSign(day.add(266, 'days')),
-    dueDate: day.add(266, 'days').format('MM/DD/YY'),
+    day: day.clone().format('YYYY-MM-DD'),
+    sign: getSign(day.clone().add(266, 'days')),
+    dueDate: day.clone().add(266, 'days').format('MM/DD/YY'),
   }));
   return enhancedDays;
 };
@@ -120,6 +120,6 @@ document.querySelector('#previous-month').addEventListener('click', () => {
 });
 
 document.querySelector('#next-month').addEventListener('click', () => {
-  current = current.add(1, 'month');
+  current = current.clone().add(1, 'month');
   update(current);
 });
