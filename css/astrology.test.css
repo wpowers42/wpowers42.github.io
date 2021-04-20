@@ -1,5 +1,9 @@
-body{
+body {
   touch-action: manipulation;
+}
+
+header {
+  touch-action: none;
 }
 
 #calendar-wrapper {
@@ -16,11 +20,9 @@ time {
   #calendar-wrapper {
     padding: 1%;
   }
-
   time {
     font-size: 7px;
   }
-
 }
 
 #navigation-wrapper {
@@ -29,8 +31,7 @@ time {
   justify-content: space-between;
 }
 
-#previous-month,
-#next-month {
+#previous-month, #next-month {
   opacity: 1.0;
   background-color: white;
   border: none;
@@ -39,7 +40,6 @@ time {
 h4 {
   font-size: 1.0rem;
 }
-
 
 #calendar-days {
   display: grid;
