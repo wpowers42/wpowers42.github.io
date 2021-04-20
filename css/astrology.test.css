@@ -44,6 +44,7 @@ h4 {
   align-items: center;
   text-align: center;
   font-size: 1.0rem;
+  padding: 0 1em;
 }
 
 #calendar-grid {
