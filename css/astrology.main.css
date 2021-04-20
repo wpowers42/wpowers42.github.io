@@ -15,7 +15,7 @@ body {
 }
 
 #page-content {
-  padding: 20px 0%;
+  padding: 20px 2px;
 }
 
 .day-of-month {
@@ -78,7 +78,6 @@ body {
 }
 
 #calendar-wrapper {
-  width: 95%;
   max-width: 750px;
   display: grid;
   margin: auto;
