@@ -16,7 +16,7 @@ time {
   time {
     font-size: 7px;
   }
-  
+
 }
 
 #navigation-wrapper {
@@ -30,6 +30,7 @@ time {
   opacity: 1.0;
   background-color: white;
   border: none;
+  touch-action: none;
 }
 
 h4 {
