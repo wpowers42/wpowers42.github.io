@@ -156,5 +156,3 @@ document.querySelector('#next-month').addEventListener('click', function () {
   current = current.clone().add(1, 'month');
   update(current);
 });
-var width = window.innerWidth > 0 ? window.innerWidth : document.screen.width;
-document.querySelector('#device-width').textContent = width;
