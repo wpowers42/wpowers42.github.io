@@ -123,7 +123,12 @@ var update = function update() {
     number.className = 'day-of-month';
     var sign = document.createElement('div');
     sign.textContent = day ? day.sign : '';
-    sign.className = 'sign';
+    sign.classList.add('sign');
+
+    if (day) {
+      sign.classList.add(day.sign);
+    }
+
     var dueDate = document.createElement('div');
     dueDate.textContent = day ? day.dueDate : '';
     dueDate.className = 'due-date';
